@@ -515,6 +515,19 @@ export const appRouter = router({
       await db.setKuraimiSettings(input);
       return { success: true };
     }),
+    getContactSettings: publicProcedure.query(async () => {
+      return db.getContactSettings();
+    }),
+    updateContactSettings: adminProcedure.input(z.object({
+      phone1: z.string().max(30).default(""),
+      phone2: z.string().max(30).default(""),
+      whatsapp: z.string().max(30).default(""),
+      instagram: z.string().max(100).default(""),
+      tiktok: z.string().max(100).default(""),
+    })).mutation(async ({ input }) => {
+      await db.setContactSettings(input);
+      return { success: true };
+    }),
   }),
 
   // ─── Reviews ────────────────────────────────────────

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Save, RefreshCw, DollarSign, Building2 } from "lucide-react";
+import { ArrowLeft, Save, RefreshCw, DollarSign, Building2, Phone, Instagram } from "lucide-react";
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -12,8 +12,10 @@ import { toast } from "sonner";
 export default function AdminSettings() {
   const { data: exchangeData, isLoading } = trpc.settings.getExchangeRate.useQuery();
   const { data: kuraimiData, isLoading: kuraimiLoading } = trpc.settings.getKuraimiSettings.useQuery();
+  const { data: contactData, isLoading: contactLoading } = trpc.settings.getContactSettings.useQuery();
   const updateMutation = trpc.settings.updateExchangeRate.useMutation();
   const updateKuraimiMutation = trpc.settings.updateKuraimiSettings.useMutation();
+  const updateContactMutation = trpc.settings.updateContactSettings.useMutation();
   const utils = trpc.useUtils();
 
   const [rate, setRate] = useState("");
@@ -29,6 +31,14 @@ export default function AdminSettings() {
   const [instructions, setInstructions] = useState("");
   const [instructionsAr, setInstructionsAr] = useState("");
   const [hasKuraimiChanges, setHasKuraimiChanges] = useState(false);
+
+  // Contact state
+  const [phone1, setPhone1] = useState("");
+  const [phone2, setPhone2] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [tiktok, setTiktok] = useState("");
+  const [hasContactChanges, setHasContactChanges] = useState(false);
 
   useEffect(() => {
     if (exchangeData) {
@@ -48,6 +58,16 @@ export default function AdminSettings() {
       setInstructionsAr(kuraimiData.instructionsAr || "");
     }
   }, [kuraimiData]);
+
+  useEffect(() => {
+    if (contactData) {
+      setPhone1(contactData.phone1);
+      setPhone2(contactData.phone2);
+      setWhatsapp(contactData.whatsapp);
+      setInstagram(contactData.instagram);
+      setTiktok(contactData.tiktok);
+    }
+  }, [contactData]);
 
   const handleRateChange = (val: string) => {
     setRate(val);
@@ -98,11 +118,28 @@ export default function AdminSettings() {
     }
   };
 
+  const handleContactSave = async () => {
+    try {
+      await updateContactMutation.mutateAsync({
+        phone1: phone1.trim(),
+        phone2: phone2.trim(),
+        whatsapp: whatsapp.trim(),
+        instagram: instagram.trim(),
+        tiktok: tiktok.trim(),
+      });
+      utils.settings.getContactSettings.invalidate();
+      setHasContactChanges(false);
+      toast.success("تم حفظ معلومات التواصل بنجاح");
+    } catch {
+      toast.error("فشل حفظ معلومات التواصل");
+    }
+  };
+
   // Example calculation
   const exampleSAR = 100;
   const exampleYER = parseFloat(rate) > 0 ? exampleSAR * parseFloat(rate) : 0;
 
-  if (isLoading || kuraimiLoading) {
+  if (isLoading || kuraimiLoading || contactLoading) {
     return (
       <div className="min-h-screen bg-secondary/20">
         <div className="container py-8 max-w-3xl">
@@ -129,9 +166,119 @@ export default function AdminSettings() {
             <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
               Store Settings
             </h1>
-            <p className="text-sm text-muted-foreground">Manage exchange rates, currency display, and payment methods</p>
+            <p className="text-sm text-muted-foreground">Manage exchange rates, currency display, payment methods, and contact info</p>
           </div>
         </div>
+
+        {/* Contact & Social Media Card */}
+        <Card className="shadow-sm border-2 border-emerald-200">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-emerald-500/10 rounded-full flex items-center justify-center">
+                <Phone className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Contact & Social Media / التواصل</CardTitle>
+                <CardDescription>
+                  أرقام التواصل وحسابات التواصل الاجتماعي — تظهر في الفوتر وصفحة التواصل
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Phone Numbers */}
+            <div className="space-y-4">
+              <Label className="text-sm font-semibold">أرقام الهاتف / Phone Numbers</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">رقم الهاتف الأول</Label>
+                  <Input
+                    value={phone1}
+                    onChange={(e) => { setPhone1(e.target.value); setHasContactChanges(true); }}
+                    placeholder="+966 5XX XXX XXXX"
+                    className="text-sm font-mono"
+                    dir="ltr"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">رقم الهاتف الثاني</Label>
+                  <Input
+                    value={phone2}
+                    onChange={(e) => { setPhone2(e.target.value); setHasContactChanges(true); }}
+                    placeholder="+966 5XX XXX XXXX"
+                    className="text-sm font-mono"
+                    dir="ltr"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* WhatsApp */}
+            <div className="space-y-1.5">
+              <Label className="text-sm font-semibold">واتساب / WhatsApp</Label>
+              <Input
+                value={whatsapp}
+                onChange={(e) => { setWhatsapp(e.target.value); setHasContactChanges(true); }}
+                placeholder="+966 5XX XXX XXXX"
+                className="text-sm font-mono"
+                dir="ltr"
+              />
+              <p className="text-xs text-muted-foreground">رقم الواتساب للتواصل المباشر مع العملاء</p>
+            </div>
+
+            {/* Social Media */}
+            <div className="space-y-4">
+              <Label className="text-sm font-semibold">حسابات التواصل الاجتماعي / Social Media</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5 p-4 bg-gradient-to-br from-pink-50 to-purple-50 rounded-xl border border-pink-200/50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Instagram className="w-4 h-4 text-pink-600" />
+                    <Label className="text-xs font-semibold text-pink-700">Instagram</Label>
+                  </div>
+                  <Input
+                    value={instagram}
+                    onChange={(e) => { setInstagram(e.target.value); setHasContactChanges(true); }}
+                    placeholder="4_YOU_U_STORE"
+                    className="text-sm"
+                    dir="ltr"
+                  />
+                </div>
+                <div className="space-y-1.5 p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200/50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.88 2.89 2.89 0 0 1 2.88-2.88c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15.2a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.73a8.19 8.19 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.16z"/></svg>
+                    <Label className="text-xs font-semibold">TikTok</Label>
+                  </div>
+                  <Input
+                    value={tiktok}
+                    onChange={(e) => { setTiktok(e.target.value); setHasContactChanges(true); }}
+                    placeholder="4_YOU_U_STORE"
+                    className="text-sm"
+                    dir="ltr"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <div className="flex items-center gap-3 pt-2">
+              <Button
+                onClick={handleContactSave}
+                disabled={!hasContactChanges || updateContactMutation.isPending}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-6"
+              >
+                {updateContactMutation.isPending ? (
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Save className="w-4 h-4 mr-2" />
+                )}
+                حفظ معلومات التواصل
+              </Button>
+              {hasContactChanges && (
+                <span className="text-xs text-muted-foreground">لديك تغييرات غير محفوظة</span>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Exchange Rate Card */}
         <Card className="shadow-sm">
@@ -275,7 +422,7 @@ export default function AdminSettings() {
                 {/* USD Account */}
                 <div className="space-y-1.5 p-4 bg-green-50/50 rounded-xl border border-green-200/50">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">USD $</span>
+                    <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">USD</span>
                     <Label className="text-xs font-semibold">Dollar Account</Label>
                   </div>
                   <Input

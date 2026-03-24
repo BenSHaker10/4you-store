@@ -473,6 +473,45 @@ export async function setKuraimiSettings(settings: {
   ]);
 }
 
+// ─── Contact Settings ───────────────────────────
+
+export async function getContactSettings(): Promise<{
+  phone1: string;
+  phone2: string;
+  whatsapp: string;
+  instagram: string;
+  tiktok: string;
+}> {
+  const keys = [
+    "contact_phone1", "contact_phone2", "contact_whatsapp",
+    "contact_instagram", "contact_tiktok",
+  ];
+  const values = await Promise.all(keys.map(k => getStoreSetting(k)));
+  return {
+    phone1: values[0] ?? "",
+    phone2: values[1] ?? "",
+    whatsapp: values[2] ?? "",
+    instagram: values[3] ?? "4_YOU_U_STORE",
+    tiktok: values[4] ?? "4_YOU_U_STORE",
+  };
+}
+
+export async function setContactSettings(settings: {
+  phone1: string;
+  phone2: string;
+  whatsapp: string;
+  instagram: string;
+  tiktok: string;
+}): Promise<void> {
+  await Promise.all([
+    setStoreSetting("contact_phone1", settings.phone1),
+    setStoreSetting("contact_phone2", settings.phone2),
+    setStoreSetting("contact_whatsapp", settings.whatsapp),
+    setStoreSetting("contact_instagram", settings.instagram),
+    setStoreSetting("contact_tiktok", settings.tiktok),
+  ]);
+}
+
 // ─── Email Verifications ─────────────────────────────────
 export async function createEmailVerificationToken(userId: number, token: string): Promise<void> {
   const db = await getDb();
