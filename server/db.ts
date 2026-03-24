@@ -144,7 +144,7 @@ export async function deleteCategory(id: number) {
 export async function getProducts(opts?: { categoryId?: number; search?: string; brand?: string; minPrice?: number; maxPrice?: number; featured?: boolean; department?: string; limit?: number; offset?: number; isActive?: boolean }) {
   const db = await getDb();
   if (!db) return { items: [], total: 0 };
-  const conditions = [];
+  const conditions = [eq(orders.hiddenFromAdmin, false)];
   if (opts?.isActive !== false) conditions.push(eq(products.isActive, true));
   if (opts?.categoryId) conditions.push(eq(products.categoryId, opts.categoryId));
   if (opts?.brand) conditions.push(eq(products.brand, opts.brand));
@@ -356,11 +356,10 @@ export async function updateOrderStatus(orderId: number, status: string) {
 }
 
 
-export async function deleteOrder(orderId: number) {
+export async function hideOrderFromAdmin(orderId: number) {
   const db = await getDb();
   if (!db) return;
-  await db.delete(orderItems).where(eq(orderItems.orderId, orderId));
-  await db.delete(orders).where(eq(orders.id, orderId));
+  await db.update(orders).set({ hiddenFromAdmin: true }).where(eq(orders.id, orderId));
 }
 
 export async function updateOrderPayment(sessionId: string, paymentIntentId: string) {

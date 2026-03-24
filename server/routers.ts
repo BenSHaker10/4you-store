@@ -426,7 +426,7 @@ export const appRouter = router({
     deleteOrder: adminProcedure.input(z.object({
       orderId: z.number(),
     })).mutation(async ({ input }) => {
-      await db.deleteOrder(input.orderId);
+      await db.hideOrderFromAdmin(input.orderId);
       return { success: true };
     }),
     users: adminProcedure.query(async () => {

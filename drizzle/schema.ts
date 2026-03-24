@@ -131,6 +131,7 @@ export const orders = mysqlTable("orders", {
   discountAmount: decimal("discountAmount", { precision: 10, scale: 2 }).default("0"),
   paymentMethod: varchar("paymentMethod", { length: 50 }).default("cod"),
   transferReference: varchar("transferReference", { length: 255 }),
+  hiddenFromAdmin: boolean("hiddenFromAdmin").default(false),
   notes: text("notes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
