@@ -1,7 +1,7 @@
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Package, ArrowRight, ArrowLeft, ChevronRight, ChevronLeft } from "lucide-react";
+import { Package, ArrowRight, ArrowLeft, ChevronRight, ChevronLeft, CreditCard, Building2, Banknote } from "lucide-react";
 import { Link } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -36,7 +36,20 @@ export default function Orders() {
     if (isRTL) {
       return status === "paid" ? "مدفوع" : "قيد الانتظار";
     }
-    return status;
+    return status === "paid" ? "Paid" : "Unpaid";
+  };
+
+  const getPaymentMethodLabel = (method: string) => {
+    if (isRTL) {
+      return method === "kuraimi" ? "الكريمي" : method === "stripe" ? "بطاقة" : "عند الاستلام";
+    }
+    return method === "kuraimi" ? "Kuraimi" : method === "stripe" ? "Card" : "COD";
+  };
+
+  const getPaymentMethodIcon = (method: string) => {
+    if (method === "kuraimi") return <Building2 className="w-3.5 h-3.5" />;
+    if (method === "stripe") return <CreditCard className="w-3.5 h-3.5" />;
+    return <Banknote className="w-3.5 h-3.5" />;
   };
 
   if (isLoading) {
@@ -70,7 +83,14 @@ export default function Orders() {
       </div>
 
       <div className="container py-8">
-        <h1 className="text-2xl font-bold mb-6" style={{ fontFamily: "var(--font-display)" }}>{t.orders.title}</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>{t.orders.title}</h1>
+          {orders && orders.length > 0 && (
+            <span className="text-sm text-muted-foreground">
+              {orders.length} {isRTL ? "طلب" : orders.length === 1 ? "order" : "orders"}
+            </span>
+          )}
+        </div>
 
         {!orders || orders.length === 0 ? (
           <div className="text-center py-20">
@@ -89,10 +109,12 @@ export default function Orders() {
           <div className="space-y-4">
             {orders.map(order => {
               const config = statusConfig[order.status] || { color: "text-gray-700", bg: "bg-gray-50 border-gray-100", dot: "bg-gray-500" };
+              const paymentMethod = (order as any).paymentMethod || "cod";
               return (
                 <Link key={order.id} href={`/orders/${order.id}`} className="block group">
                   <div className="border border-border/40 bg-card rounded-2xl overflow-hidden hover:border-primary/20 hover:shadow-sm transition-all">
                     <div className="p-5 md:p-6">
+                      {/* Top row: Order number, date, chevron */}
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <span className="text-sm font-bold">{isRTL ? `طلب #${order.id}` : `Order #${order.id}`}</span>
@@ -102,12 +124,16 @@ export default function Orders() {
                         </div>
                         <ChevronIcon className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                       </div>
+
+                      {/* Bottom row: Status badges + total */}
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {/* Order status */}
                           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 border text-[11px] font-semibold rounded-full capitalize ${config.bg} ${config.color}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
                             {getStatusLabel(order.status)}
                           </span>
+                          {/* Payment status */}
                           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 border text-[11px] font-semibold rounded-full capitalize ${
                             order.paymentStatus === "paid"
                               ? "bg-green-50 border-green-100 text-green-700"
@@ -115,8 +141,13 @@ export default function Orders() {
                           }`}>
                             {getPaymentLabel(order.paymentStatus)}
                           </span>
+                          {/* Payment method */}
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border/60 text-[11px] font-medium rounded-full text-muted-foreground bg-secondary/30">
+                            {getPaymentMethodIcon(paymentMethod)}
+                            {getPaymentMethodLabel(paymentMethod)}
+                          </span>
                         </div>
-                        <span className="text-lg font-bold">{parseFloat(order.totalAmount).toFixed(2)} {isRTL ? "ر.س" : "SAR"}</span>
+                        <span className="text-lg font-bold shrink-0 ms-3">{parseFloat(order.totalAmount).toFixed(2)} {isRTL ? "ر.س" : "SAR"}</span>
                       </div>
                     </div>
                   </div>

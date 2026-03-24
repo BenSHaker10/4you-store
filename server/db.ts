@@ -144,7 +144,7 @@ export async function deleteCategory(id: number) {
 export async function getProducts(opts?: { categoryId?: number; search?: string; brand?: string; minPrice?: number; maxPrice?: number; featured?: boolean; department?: string; limit?: number; offset?: number; isActive?: boolean }) {
   const db = await getDb();
   if (!db) return { items: [], total: 0 };
-  const conditions = [eq(orders.hiddenFromAdmin, false)];
+  const conditions = [];
   if (opts?.isActive !== false) conditions.push(eq(products.isActive, true));
   if (opts?.categoryId) conditions.push(eq(products.categoryId, opts.categoryId));
   if (opts?.brand) conditions.push(eq(products.brand, opts.brand));
@@ -339,9 +339,9 @@ export async function getOrderItems(orderId: number) {
 export async function getAllOrders(opts?: { status?: string; limit?: number; offset?: number }) {
   const db = await getDb();
   if (!db) return { items: [], total: 0 };
-  const conditions = [];
+  const conditions = [eq(orders.hiddenFromAdmin, false)];
   if (opts?.status && opts.status !== "all") conditions.push(eq(orders.status, opts.status as any));
-  const where = conditions.length > 0 ? and(...conditions) : undefined;
+  const where = and(...conditions);
   const [items, countResult] = await Promise.all([
     db.select().from(orders).where(where).orderBy(desc(orders.createdAt)).limit(opts?.limit ?? 50).offset(opts?.offset ?? 0),
     db.select({ count: sql<number>`count(*)` }).from(orders).where(where),
