@@ -423,6 +423,12 @@ export const appRouter = router({
       await db.updateOrderStatus(input.orderId, input.status);
       return { success: true };
     }),
+    deleteOrder: adminProcedure.input(z.object({
+      orderId: z.number(),
+    })).mutation(async ({ input }) => {
+      await db.deleteOrder(input.orderId);
+      return { success: true };
+    }),
     users: adminProcedure.query(async () => {
       return db.getAllUsers();
     }),

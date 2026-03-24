@@ -355,6 +355,14 @@ export async function updateOrderStatus(orderId: number, status: string) {
   await db.update(orders).set({ status: status as any }).where(eq(orders.id, orderId));
 }
 
+
+export async function deleteOrder(orderId: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db.delete(orderItems).where(eq(orderItems.orderId, orderId));
+  await db.delete(orders).where(eq(orders.id, orderId));
+}
+
 export async function updateOrderPayment(sessionId: string, paymentIntentId: string) {
   const db = await getDb();
   if (!db) return;
