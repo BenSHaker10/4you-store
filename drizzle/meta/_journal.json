@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1773772021689,
+      "tag": "0000_mean_the_initiative",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1773778752778,
+      "tag": "0001_closed_dorian_gray",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1773790105699,
+      "tag": "0002_spicy_kulan_gath",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1773790802484,
+      "tag": "0003_rainy_wonder_man",
+      "breakpoints": true
+    }
+  ]
+}
