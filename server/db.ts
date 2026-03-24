@@ -362,6 +362,12 @@ export async function hideOrderFromAdmin(orderId: number) {
   await db.update(orders).set({ hiddenFromAdmin: true }).where(eq(orders.id, orderId));
 }
 
+export async function updatePaymentStatus(orderId: number, paymentStatus: string) {
+  const db = await getDb();
+  if (!db) return;
+  await db.update(orders).set({ paymentStatus: paymentStatus as any }).where(eq(orders.id, orderId));
+}
+
 export async function updateOrderPayment(sessionId: string, paymentIntentId: string) {
   const db = await getDb();
   if (!db) return;

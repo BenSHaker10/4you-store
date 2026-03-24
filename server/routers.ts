@@ -423,6 +423,12 @@ export const appRouter = router({
       await db.updateOrderStatus(input.orderId, input.status);
       return { success: true };
     }),
+    updatePaymentStatus: adminProcedure.input(z.object({
+      orderId: z.number(), paymentStatus: z.enum(["paid", "unpaid"]),
+    })).mutation(async ({ input }) => {
+      await db.updatePaymentStatus(input.orderId, input.paymentStatus);
+      return { success: true };
+    }),
     deleteOrder: adminProcedure.input(z.object({
       orderId: z.number(),
     })).mutation(async ({ input }) => {

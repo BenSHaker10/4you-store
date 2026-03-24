@@ -2,7 +2,7 @@ import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Eye, Trash2, Bell, BellRing } from "lucide-react";
+import { ArrowLeft, Eye, Trash2, Bell, BellRing, CheckCircle2, XCircle } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -31,7 +31,7 @@ export default function AdminOrders() {
     { status: statusFilter !== "all" ? statusFilter : undefined, limit: 100 },
     {
       enabled: user?.role === "admin",
-      refetchInterval: 15000, // Auto-refresh every 15 seconds for new orders
+      refetchInterval: 15000,
     }
   );
 
@@ -45,13 +45,11 @@ export default function AdminOrders() {
           description: "New order received!",
           duration: 10000,
         });
-        // Play notification sound
         try {
           const audio = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbsGczGjlkjrfWwX1RLSF5pMvb1IhYOzN3l8GYbkMvP3KUw5RuQy8/cpTDlG5DLz9ylMOUbkMvP3KUw5RuQy8/cpTDlG4A");
           audio.volume = 0.5;
           audio.play().catch(() => {});
         } catch {}
-        // Auto-dismiss alert after 5 seconds
         setTimeout(() => setNewOrderAlert(false), 5000);
       }
       prevOrderCountRef.current = data.total;
@@ -61,7 +59,21 @@ export default function AdminOrders() {
   const updateStatus = trpc.admin.updateOrderStatus.useMutation({
     onSuccess: () => {
       utils.admin.orders.invalidate();
-      toast.success("Order status updated");
+      toast.success("تم تحديث حالة الطلب");
+    },
+  });
+
+  const updatePaymentStatus = trpc.admin.updatePaymentStatus.useMutation({
+    onSuccess: (_data, variables) => {
+      utils.admin.orders.invalidate();
+      if (variables.paymentStatus === "paid") {
+        toast.success("✅ تم تأكيد الدفع بنجاح");
+      } else {
+        toast.success("تم تغيير حالة الدفع إلى: لم يتم الدفع");
+      }
+    },
+    onError: () => {
+      toast.error("فشل تحديث حالة الدفع");
     },
   });
 
@@ -78,6 +90,16 @@ export default function AdminOrders() {
   const handleDelete = (orderId: number) => {
     if (window.confirm("هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.")) {
       deleteOrder.mutate({ orderId });
+    }
+  };
+
+  const handleTogglePayment = (orderId: number, currentStatus: string) => {
+    const newStatus = currentStatus === "paid" ? "unpaid" : "paid";
+    const message = newStatus === "paid"
+      ? "هل تأكدت من وصول المبلغ لحسابك؟ سيتم تغيير الحالة إلى: تم الدفع"
+      : "هل تريد تغيير الحالة إلى: لم يتم الدفع؟";
+    if (window.confirm(message)) {
+      updatePaymentStatus.mutate({ orderId, paymentStatus: newStatus as "paid" | "unpaid" });
     }
   };
 
@@ -128,9 +150,10 @@ export default function AdminOrders() {
                     <th className="text-left text-xs font-semibold uppercase tracking-wider p-4">Order</th>
                     <th className="text-left text-xs font-semibold uppercase tracking-wider p-4">Customer</th>
                     <th className="text-left text-xs font-semibold uppercase tracking-wider p-4">Total</th>
-                    <th className="text-left text-xs font-semibold uppercase tracking-wider p-4">Payment</th>
+                    <th className="text-left text-xs font-semibold uppercase tracking-wider p-4">Payment Method</th>
+                    <th className="text-left text-xs font-semibold uppercase tracking-wider p-4">Payment Status / حالة الدفع</th>
                     <th className="text-left text-xs font-semibold uppercase tracking-wider p-4">Transfer Ref / رقم الحوالة</th>
-                    <th className="text-left text-xs font-semibold uppercase tracking-wider p-4">Status</th>
+                    <th className="text-left text-xs font-semibold uppercase tracking-wider p-4">Order Status</th>
                     <th className="text-left text-xs font-semibold uppercase tracking-wider p-4">Date</th>
                     <th className="text-right text-xs font-semibold uppercase tracking-wider p-4">Actions</th>
                   </tr>
@@ -143,18 +166,37 @@ export default function AdminOrders() {
                         <p className="text-sm">{order.shippingName}</p>
                         <p className="text-xs text-muted-foreground">{order.shippingEmail}</p>
                       </td>
-                      <td className="p-4 font-semibold">${parseFloat(order.totalAmount).toFixed(2)}</td>
+                      <td className="p-4 font-semibold">{parseFloat(order.totalAmount).toFixed(2)} ر.س</td>
                       <td className="p-4">
-                        <div className="flex flex-col gap-1">
-                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full inline-block w-fit ${order.paymentStatus === "paid" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}>
-                            {order.paymentStatus}
+                        {(order as any).paymentMethod && (
+                          <span className="text-xs font-medium">
+                            {(order as any).paymentMethod === "kuraimi" ? "🏦 الكريمي" : (order as any).paymentMethod === "cod" ? "💵 عند الاستلام" : (order as any).paymentMethod === "card" ? "💳 بطاقة" : (order as any).paymentMethod}
                           </span>
-                          {(order as any).paymentMethod && (
-                            <span className="text-xs text-muted-foreground">
-                              {(order as any).paymentMethod === "kuraimi" ? "🏦 الكريمي" : "💵 COD"}
-                            </span>
+                        )}
+                      </td>
+                      <td className="p-4">
+                        <button
+                          onClick={() => handleTogglePayment(order.id, order.paymentStatus)}
+                          disabled={updatePaymentStatus.isPending}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border-2 hover:shadow-md ${
+                            order.paymentStatus === "paid"
+                              ? "bg-green-50 text-green-700 border-green-300 hover:bg-green-100"
+                              : "bg-red-50 text-red-700 border-red-300 hover:bg-red-100"
+                          } ${updatePaymentStatus.isPending ? "opacity-50 cursor-not-allowed" : ""}`}
+                          title={order.paymentStatus === "paid" ? "اضغط لتغيير إلى: لم يتم الدفع" : "اضغط لتأكيد الدفع"}
+                        >
+                          {order.paymentStatus === "paid" ? (
+                            <>
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              تم الدفع ✓
+                            </>
+                          ) : (
+                            <>
+                              <XCircle className="w-3.5 h-3.5" />
+                              لم يتم الدفع
+                            </>
                           )}
-                        </div>
+                        </button>
                       </td>
                       <td className="p-4">
                         {(order as any).transferReference ? (
