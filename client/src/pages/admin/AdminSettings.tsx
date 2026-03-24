@@ -36,6 +36,7 @@ export default function AdminSettings() {
   const [phone1, setPhone1] = useState("");
   const [phone2, setPhone2] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [whatsapp2, setWhatsapp2] = useState("");
   const [instagram, setInstagram] = useState("");
   const [tiktok, setTiktok] = useState("");
   const [hasContactChanges, setHasContactChanges] = useState(false);
@@ -64,6 +65,7 @@ export default function AdminSettings() {
       setPhone1(contactData.phone1);
       setPhone2(contactData.phone2);
       setWhatsapp(contactData.whatsapp);
+      setWhatsapp2(contactData.whatsapp2);
       setInstagram(contactData.instagram);
       setTiktok(contactData.tiktok);
     }
@@ -124,6 +126,7 @@ export default function AdminSettings() {
         phone1: phone1.trim(),
         phone2: phone2.trim(),
         whatsapp: whatsapp.trim(),
+        whatsapp2: whatsapp2.trim(),
         instagram: instagram.trim(),
         tiktok: tiktok.trim(),
       });
@@ -214,16 +217,31 @@ export default function AdminSettings() {
             </div>
 
             {/* WhatsApp */}
-            <div className="space-y-1.5">
+            <div className="space-y-4">
               <Label className="text-sm font-semibold">واتساب / WhatsApp</Label>
-              <Input
-                value={whatsapp}
-                onChange={(e) => { setWhatsapp(e.target.value); setHasContactChanges(true); }}
-                placeholder="+966 5XX XXX XXXX"
-                className="text-sm font-mono"
-                dir="ltr"
-              />
-              <p className="text-xs text-muted-foreground">رقم الواتساب للتواصل المباشر مع العملاء</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">واتساب 1</Label>
+                  <Input
+                    value={whatsapp}
+                    onChange={(e) => { setWhatsapp(e.target.value); setHasContactChanges(true); }}
+                    placeholder="+966 5XX XXX XXXX"
+                    className="text-sm font-mono"
+                    dir="ltr"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">واتساب 2</Label>
+                  <Input
+                    value={whatsapp2}
+                    onChange={(e) => { setWhatsapp2(e.target.value); setHasContactChanges(true); }}
+                    placeholder="+966 5XX XXX XXXX"
+                    className="text-sm font-mono"
+                    dir="ltr"
+                  />
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground">أرقام الواتساب للتواصل المباشر مع العملاء</p>
             </div>
 
             {/* Social Media */}

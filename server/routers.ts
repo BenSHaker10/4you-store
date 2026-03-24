@@ -522,6 +522,7 @@ export const appRouter = router({
       phone1: z.string().max(30).default(""),
       phone2: z.string().max(30).default(""),
       whatsapp: z.string().max(30).default(""),
+      whatsapp2: z.string().max(30).default(""),
       instagram: z.string().max(100).default(""),
       tiktok: z.string().max(100).default(""),
     })).mutation(async ({ input }) => {

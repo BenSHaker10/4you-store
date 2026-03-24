@@ -479,11 +479,12 @@ export async function getContactSettings(): Promise<{
   phone1: string;
   phone2: string;
   whatsapp: string;
+  whatsapp2: string;
   instagram: string;
   tiktok: string;
 }> {
   const keys = [
-    "contact_phone1", "contact_phone2", "contact_whatsapp",
+    "contact_phone1", "contact_phone2", "contact_whatsapp", "contact_whatsapp2",
     "contact_instagram", "contact_tiktok",
   ];
   const values = await Promise.all(keys.map(k => getStoreSetting(k)));
@@ -491,8 +492,9 @@ export async function getContactSettings(): Promise<{
     phone1: values[0] ?? "",
     phone2: values[1] ?? "",
     whatsapp: values[2] ?? "",
-    instagram: values[3] ?? "4_YOU_U_STORE",
-    tiktok: values[4] ?? "4_YOU_U_STORE",
+    whatsapp2: values[3] ?? "",
+    instagram: values[4] ?? "4_YOU_U_STORE",
+    tiktok: values[5] ?? "4_YOU_U_STORE",
   };
 }
 
@@ -500,6 +502,7 @@ export async function setContactSettings(settings: {
   phone1: string;
   phone2: string;
   whatsapp: string;
+  whatsapp2: string;
   instagram: string;
   tiktok: string;
 }): Promise<void> {
@@ -507,6 +510,7 @@ export async function setContactSettings(settings: {
     setStoreSetting("contact_phone1", settings.phone1),
     setStoreSetting("contact_phone2", settings.phone2),
     setStoreSetting("contact_whatsapp", settings.whatsapp),
+    setStoreSetting("contact_whatsapp2", settings.whatsapp2),
     setStoreSetting("contact_instagram", settings.instagram),
     setStoreSetting("contact_tiktok", settings.tiktok),
   ]);
