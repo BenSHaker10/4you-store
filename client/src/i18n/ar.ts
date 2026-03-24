@@ -209,6 +209,17 @@ const ar: Translations = {
     processing: "جاري المعالجة...",
     orderSuccess: "تم تأكيد الطلب بنجاح!",
     orderSuccessDesc: "شكراً لطلبك. ستصلك رسالة تأكيد على بريدك الإلكتروني قريباً.",
+    paymentMethod: "طريقة الدفع",
+    cod: "الدفع عند الاستلام",
+    kuraimi: "تحويل عبر الكريمي",
+    kuraimiAccounts: "حسابات الكريمي",
+    beneficiary: "اسم المستفيد",
+    accountUSD: "حساب الدولار",
+    accountYER: "حساب الريال اليمني",
+    accountSAR: "حساب الريال السعودي",
+    transferReference: "رقم الحوالة",
+    transferReferencePlaceholder: "أدخل رقم الحوالة / الإيصال",
+    selectCurrency: "اختر العملة التي حولت بها",
   },
 
   // Orders
@@ -312,6 +323,15 @@ const ar: Translations = {
     save: "حفظ",
     saving: "جاري الحفظ...",
     saved: "تم الحفظ!",
+    kuraimiSettings: "إعدادات الدفع عبر الكريمي",
+    kuraimiEnabled: "تفعيل الدفع عبر الكريمي",
+    kuraimiEnabledDesc: "السماح للعملاء بالدفع عبر تحويل الكريمي",
+    beneficiaryName: "اسم المستفيد",
+    accountUSD: "رقم حساب الدولار",
+    accountYER: "رقم حساب الريال اليمني",
+    accountSAR: "رقم حساب الريال السعودي",
+    instructions: "تعليمات (إنجليزي)",
+    instructionsAr: "تعليمات (عربي)",
   },
 
   // Common

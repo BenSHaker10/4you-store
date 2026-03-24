@@ -412,6 +412,54 @@ export async function setExchangeRate(rate: number, enabled: boolean): Promise<v
   ]);
 }
 
+// ─── Kuraimi Payment Settings ───────────────────────────
+
+export async function getKuraimiSettings(): Promise<{
+  enabled: boolean;
+  beneficiaryName: string;
+  accountUSD: string;
+  accountYER: string;
+  accountSAR: string;
+  instructions: string;
+  instructionsAr: string;
+}> {
+  const keys = [
+    "kuraimi_enabled", "kuraimi_beneficiary_name",
+    "kuraimi_account_usd", "kuraimi_account_yer", "kuraimi_account_sar",
+    "kuraimi_instructions", "kuraimi_instructions_ar",
+  ];
+  const values = await Promise.all(keys.map(k => getStoreSetting(k)));
+  return {
+    enabled: values[0] === "true",
+    beneficiaryName: values[1] ?? "محمد شاكر عبداللطيف سيف",
+    accountUSD: values[2] ?? "123456789",
+    accountYER: values[3] ?? "123456789",
+    accountSAR: values[4] ?? "123456789",
+    instructions: values[5] ?? "Please transfer the total amount to one of the accounts below and enter the transfer reference number.",
+    instructionsAr: values[6] ?? "يرجى تحويل المبلغ الإجمالي إلى أحد الحسابات أدناه وإدخال رقم الحوالة.",
+  };
+}
+
+export async function setKuraimiSettings(settings: {
+  enabled: boolean;
+  beneficiaryName: string;
+  accountUSD: string;
+  accountYER: string;
+  accountSAR: string;
+  instructions: string;
+  instructionsAr: string;
+}): Promise<void> {
+  await Promise.all([
+    setStoreSetting("kuraimi_enabled", String(settings.enabled)),
+    setStoreSetting("kuraimi_beneficiary_name", settings.beneficiaryName),
+    setStoreSetting("kuraimi_account_usd", settings.accountUSD),
+    setStoreSetting("kuraimi_account_yer", settings.accountYER),
+    setStoreSetting("kuraimi_account_sar", settings.accountSAR),
+    setStoreSetting("kuraimi_instructions", settings.instructions),
+    setStoreSetting("kuraimi_instructions_ar", settings.instructionsAr),
+  ]);
+}
+
 // ─── Email Verifications ─────────────────────────────────
 export async function createEmailVerificationToken(userId: number, token: string): Promise<void> {
   const db = await getDb();

@@ -129,6 +129,8 @@ export const orders = mysqlTable("orders", {
   couponId: int("couponId"),
   couponCode: varchar("couponCode", { length: 50 }),
   discountAmount: decimal("discountAmount", { precision: 10, scale: 2 }).default("0"),
+  paymentMethod: varchar("paymentMethod", { length: 50 }).default("cod"),
+  transferReference: varchar("transferReference", { length: 255 }),
   notes: text("notes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

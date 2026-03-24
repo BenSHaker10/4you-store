@@ -207,6 +207,17 @@ const en = {
     processing: "Processing...",
     orderSuccess: "Order placed successfully!",
     orderSuccessDesc: "Thank you for your order. You will receive a confirmation email shortly.",
+    paymentMethod: "Payment Method",
+    cod: "Cash on Delivery",
+    kuraimi: "Kuraimi Bank Transfer",
+    kuraimiAccounts: "Kuraimi Accounts",
+    beneficiary: "Beneficiary Name",
+    accountUSD: "USD Account",
+    accountYER: "YER Account",
+    accountSAR: "SAR Account",
+    transferReference: "Transfer Reference Number",
+    transferReferencePlaceholder: "Enter the transfer/receipt number",
+    selectCurrency: "Select the currency you transferred in",
   },
 
   // Orders
@@ -310,6 +321,15 @@ const en = {
     save: "Save",
     saving: "Saving...",
     saved: "Saved!",
+    kuraimiSettings: "Kuraimi Payment Settings",
+    kuraimiEnabled: "Enable Kuraimi Payment",
+    kuraimiEnabledDesc: "Allow customers to pay via Kuraimi bank transfer",
+    beneficiaryName: "Beneficiary Name",
+    accountUSD: "USD Account Number",
+    accountYER: "YER Account Number",
+    accountSAR: "SAR Account Number",
+    instructions: "Instructions (English)",
+    instructionsAr: "Instructions (Arabic)",
   },
 
   // Common

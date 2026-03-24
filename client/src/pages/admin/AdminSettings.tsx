@@ -4,19 +4,31 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Save, RefreshCw, DollarSign } from "lucide-react";
+import { ArrowLeft, Save, RefreshCw, DollarSign, Building2 } from "lucide-react";
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 export default function AdminSettings() {
   const { data: exchangeData, isLoading } = trpc.settings.getExchangeRate.useQuery();
+  const { data: kuraimiData, isLoading: kuraimiLoading } = trpc.settings.getKuraimiSettings.useQuery();
   const updateMutation = trpc.settings.updateExchangeRate.useMutation();
+  const updateKuraimiMutation = trpc.settings.updateKuraimiSettings.useMutation();
   const utils = trpc.useUtils();
 
   const [rate, setRate] = useState("");
   const [enabled, setEnabled] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+
+  // Kuraimi state
+  const [kuraimiEnabled, setKuraimiEnabled] = useState(false);
+  const [beneficiaryName, setBeneficiaryName] = useState("");
+  const [accountUSD, setAccountUSD] = useState("");
+  const [accountYER, setAccountYER] = useState("");
+  const [accountSAR, setAccountSAR] = useState("");
+  const [instructions, setInstructions] = useState("");
+  const [instructionsAr, setInstructionsAr] = useState("");
+  const [hasKuraimiChanges, setHasKuraimiChanges] = useState(false);
 
   useEffect(() => {
     if (exchangeData) {
@@ -24,6 +36,18 @@ export default function AdminSettings() {
       setEnabled(exchangeData.enabled);
     }
   }, [exchangeData]);
+
+  useEffect(() => {
+    if (kuraimiData) {
+      setKuraimiEnabled(kuraimiData.enabled);
+      setBeneficiaryName(kuraimiData.beneficiaryName);
+      setAccountUSD(kuraimiData.accountUSD);
+      setAccountYER(kuraimiData.accountYER);
+      setAccountSAR(kuraimiData.accountSAR);
+      setInstructions(kuraimiData.instructions || "");
+      setInstructionsAr(kuraimiData.instructionsAr || "");
+    }
+  }, [kuraimiData]);
 
   const handleRateChange = (val: string) => {
     setRate(val);
@@ -51,11 +75,34 @@ export default function AdminSettings() {
     }
   };
 
+  const handleKuraimiSave = async () => {
+    if (kuraimiEnabled && (!beneficiaryName.trim() || !accountUSD.trim() || !accountYER.trim() || !accountSAR.trim())) {
+      toast.error("Please fill in all Kuraimi account details");
+      return;
+    }
+    try {
+      await updateKuraimiMutation.mutateAsync({
+        enabled: kuraimiEnabled,
+        beneficiaryName: beneficiaryName.trim(),
+        accountUSD: accountUSD.trim(),
+        accountYER: accountYER.trim(),
+        accountSAR: accountSAR.trim(),
+        instructions: instructions.trim(),
+        instructionsAr: instructionsAr.trim(),
+      });
+      utils.settings.getKuraimiSettings.invalidate();
+      setHasKuraimiChanges(false);
+      toast.success("Kuraimi settings updated successfully");
+    } catch {
+      toast.error("Failed to update Kuraimi settings");
+    }
+  };
+
   // Example calculation
   const exampleSAR = 100;
   const exampleYER = parseFloat(rate) > 0 ? exampleSAR * parseFloat(rate) : 0;
 
-  if (isLoading) {
+  if (isLoading || kuraimiLoading) {
     return (
       <div className="min-h-screen bg-secondary/20">
         <div className="container py-8 max-w-3xl">
@@ -70,7 +117,7 @@ export default function AdminSettings() {
 
   return (
     <div className="min-h-screen bg-secondary/20">
-      <div className="container py-8 max-w-3xl">
+      <div className="container py-8 max-w-3xl space-y-6">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
           <Link href="/admin">
@@ -82,7 +129,7 @@ export default function AdminSettings() {
             <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
               Store Settings
             </h1>
-            <p className="text-sm text-muted-foreground">Manage exchange rates and currency display</p>
+            <p className="text-sm text-muted-foreground">Manage exchange rates, currency display, and payment methods</p>
           </div>
         </div>
 
@@ -172,6 +219,141 @@ export default function AdminSettings() {
                 Save Changes
               </Button>
               {hasChanges && (
+                <span className="text-xs text-muted-foreground">You have unsaved changes</span>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Kuraimi Payment Settings Card */}
+        <Card className="shadow-sm">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center">
+                <Building2 className="w-4 h-4 text-blue-600" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Kuraimi Bank Transfer</CardTitle>
+                <CardDescription>
+                  Configure Kuraimi bank transfer payment method. Customers can transfer money to your accounts and provide the transfer reference number.
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Enable/Disable Toggle */}
+            <div className="flex items-center justify-between p-4 bg-secondary/40 rounded-xl">
+              <div>
+                <Label className="text-sm font-semibold">Enable Kuraimi Payment</Label>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Show Kuraimi bank transfer as a payment option at checkout
+                </p>
+              </div>
+              <Switch
+                checked={kuraimiEnabled}
+                onCheckedChange={(val) => { setKuraimiEnabled(val); setHasKuraimiChanges(true); }}
+              />
+            </div>
+
+            {/* Beneficiary Name */}
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold">Beneficiary Name (اسم المستفيد)</Label>
+              <Input
+                value={beneficiaryName}
+                onChange={(e) => { setBeneficiaryName(e.target.value); setHasKuraimiChanges(true); }}
+                placeholder="محمد شاكر عبداللطيف سيف"
+                className="text-base"
+              />
+              <p className="text-xs text-muted-foreground">The name that will appear to customers for the bank transfer</p>
+            </div>
+
+            {/* Account Numbers */}
+            <div className="space-y-4">
+              <Label className="text-sm font-semibold">Account Numbers (أرقام الحسابات)</Label>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* USD Account */}
+                <div className="space-y-1.5 p-4 bg-green-50/50 rounded-xl border border-green-200/50">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">USD $</span>
+                    <Label className="text-xs font-semibold">Dollar Account</Label>
+                  </div>
+                  <Input
+                    value={accountUSD}
+                    onChange={(e) => { setAccountUSD(e.target.value); setHasKuraimiChanges(true); }}
+                    placeholder="123456789"
+                    className="text-sm font-mono"
+                  />
+                </div>
+
+                {/* YER Account */}
+                <div className="space-y-1.5 p-4 bg-blue-50/50 rounded-xl border border-blue-200/50">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">YER</span>
+                    <Label className="text-xs font-semibold">Yemeni Account</Label>
+                  </div>
+                  <Input
+                    value={accountYER}
+                    onChange={(e) => { setAccountYER(e.target.value); setHasKuraimiChanges(true); }}
+                    placeholder="123456789"
+                    className="text-sm font-mono"
+                  />
+                </div>
+
+                {/* SAR Account */}
+                <div className="space-y-1.5 p-4 bg-purple-50/50 rounded-xl border border-purple-200/50">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-purple-700 bg-purple-100 px-2 py-0.5 rounded">SAR</span>
+                    <Label className="text-xs font-semibold">Saudi Account</Label>
+                  </div>
+                  <Input
+                    value={accountSAR}
+                    onChange={(e) => { setAccountSAR(e.target.value); setHasKuraimiChanges(true); }}
+                    placeholder="123456789"
+                    className="text-sm font-mono"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Instructions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Instructions (English)</Label>
+                <Input
+                  value={instructions}
+                  onChange={(e) => { setInstructions(e.target.value); setHasKuraimiChanges(true); }}
+                  placeholder="Transfer the amount to one of the accounts below"
+                  className="text-sm"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">التعليمات (عربي)</Label>
+                <Input
+                  value={instructionsAr}
+                  onChange={(e) => { setInstructionsAr(e.target.value); setHasKuraimiChanges(true); }}
+                  placeholder="حوّل المبلغ إلى أحد الحسابات أدناه"
+                  className="text-sm"
+                  dir="rtl"
+                />
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <div className="flex items-center gap-3 pt-2">
+              <Button
+                onClick={handleKuraimiSave}
+                disabled={!hasKuraimiChanges || updateKuraimiMutation.isPending}
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6"
+              >
+                {updateKuraimiMutation.isPending ? (
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Save className="w-4 h-4 mr-2" />
+                )}
+                Save Kuraimi Settings
+              </Button>
+              {hasKuraimiChanges && (
                 <span className="text-xs text-muted-foreground">You have unsaved changes</span>
               )}
             </div>

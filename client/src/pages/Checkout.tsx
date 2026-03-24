@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Lock, Shield, MapPin, Check, Package, Truck, RotateCcw, Tag, X, Loader2 } from "lucide-react";
+import { Lock, Shield, MapPin, Check, Package, Truck, RotateCcw, Tag, X, Loader2, Banknote, CreditCard, Building2, Copy } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -17,12 +17,19 @@ export default function Checkout() {
   const [submitting, setSubmitting] = useState(false);
   const { t, isRTL } = useLanguage();
 
+  // Kuraimi settings
+  const { data: kuraimiSettings } = trpc.settings.getKuraimiSettings.useQuery();
+
   // Coupon state
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<{
     code: string; type: string; value: string; discount: string; description?: string | null; descriptionAr?: string | null;
   } | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
+
+  // Payment method state
+  const [paymentMethod, setPaymentMethod] = useState<"cod" | "kuraimi">("cod");
+  const [transferReference, setTransferReference] = useState("");
 
   const [form, setForm] = useState({
     shippingName: user?.name || "",
@@ -82,10 +89,19 @@ export default function Checkout() {
     setCouponCode("");
   };
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success(isRTL ? "تم النسخ!" : "Copied!");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.shippingName || !form.shippingEmail || !form.shippingPhone || !form.shippingAddress || !form.shippingCity || !form.shippingCountry) {
       toast.error(isRTL ? "يرجى ملء جميع الحقول المطلوبة" : "Please fill in all required fields");
+      return;
+    }
+    if (paymentMethod === "kuraimi" && !transferReference.trim()) {
+      toast.error(isRTL ? "يرجى إدخال رقم الحوالة" : "Please enter the transfer reference number");
       return;
     }
     setSubmitting(true);
@@ -93,6 +109,8 @@ export default function Checkout() {
       await createOrder.mutateAsync({
         ...form,
         couponCode: appliedCoupon?.code,
+        paymentMethod,
+        transferReference: paymentMethod === "kuraimi" ? transferReference.trim() : undefined,
       });
     } finally {
       setSubmitting(false);
@@ -191,7 +209,7 @@ export default function Checkout() {
                   </div>
                   <div>
                     <Label htmlFor="country" className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-2 block">{t.checkout.country} *</Label>
-                    <Input id="country" value={form.shippingCountry} onChange={e => updateField("shippingCountry", e.target.value)} placeholder={isRTL ? "المملكة العربية السعودية" : "Saudi Arabia"} required className="rounded-none h-11 text-[13px] font-sans border-black/[0.08] bg-white focus:border-black/20 transition-all placeholder:text-black/15" />
+                    <Input id="country" value={form.shippingCountry} onChange={e => updateField("shippingCountry", e.target.value)} placeholder={isRTL ? "اليمن" : "Yemen"} required className="rounded-none h-11 text-[13px] font-sans border-black/[0.08] bg-white focus:border-black/20 transition-all placeholder:text-black/15" />
                   </div>
                   <div className="md:col-span-2">
                     <Label htmlFor="address" className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-2 block">{t.checkout.address} *</Label>
@@ -199,7 +217,7 @@ export default function Checkout() {
                   </div>
                   <div>
                     <Label htmlFor="city" className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-2 block">{t.checkout.city} *</Label>
-                    <Input id="city" value={form.shippingCity} onChange={e => updateField("shippingCity", e.target.value)} placeholder={isRTL ? "الرياض" : "Riyadh"} required className="rounded-none h-11 text-[13px] font-sans border-black/[0.08] bg-white focus:border-black/20 transition-all placeholder:text-black/15" />
+                    <Input id="city" value={form.shippingCity} onChange={e => updateField("shippingCity", e.target.value)} placeholder={isRTL ? "صنعاء" : "Sana'a"} required className="rounded-none h-11 text-[13px] font-sans border-black/[0.08] bg-white focus:border-black/20 transition-all placeholder:text-black/15" />
                   </div>
                   <div>
                     <Label htmlFor="zip" className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-2 block">{isRTL ? "الرمز البريدي" : "ZIP Code"}</Label>
@@ -211,6 +229,153 @@ export default function Checkout() {
                     </Label>
                     <Input id="notes" value={form.notes} onChange={e => updateField("notes", e.target.value)} placeholder={isRTL ? "تعليمات توصيل خاصة..." : "Special delivery instructions..."} className="rounded-none h-11 text-[13px] font-sans border-black/[0.08] bg-white focus:border-black/20 transition-all placeholder:text-black/15" />
                   </div>
+                </div>
+              </div>
+
+              {/* Payment Method Section */}
+              <div className="border border-black/[0.06] p-6 md:p-8">
+                <h2 className="text-[10px] font-sans tracking-luxury uppercase text-black/40 mb-6 flex items-center gap-3">
+                  <CreditCard className="w-3.5 h-3.5" strokeWidth={1.5} />
+                  {t.checkout.paymentMethod}
+                </h2>
+
+                <div className="space-y-3">
+                  {/* Cash on Delivery */}
+                  <label
+                    className={`flex items-center gap-4 p-4 border cursor-pointer transition-all ${
+                      paymentMethod === "cod"
+                        ? "border-black bg-black/[0.02]"
+                        : "border-black/[0.08] hover:border-black/20"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="cod"
+                      checked={paymentMethod === "cod"}
+                      onChange={() => setPaymentMethod("cod")}
+                      className="sr-only"
+                    />
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                      paymentMethod === "cod" ? "border-black" : "border-black/20"
+                    }`}>
+                      {paymentMethod === "cod" && <div className="w-2 h-2 rounded-full bg-black" />}
+                    </div>
+                    <Banknote className="w-5 h-5 text-black/40" strokeWidth={1.5} />
+                    <div>
+                      <p className="text-[12px] font-sans font-medium">{t.checkout.cod}</p>
+                      <p className="text-[10px] font-sans text-black/30 mt-0.5">
+                        {isRTL ? "ادفع نقداً عند استلام طلبك" : "Pay cash when you receive your order"}
+                      </p>
+                    </div>
+                  </label>
+
+                  {/* Kuraimi Bank Transfer */}
+                  {kuraimiSettings?.enabled && (
+                    <div>
+                      <label
+                        className={`flex items-center gap-4 p-4 border cursor-pointer transition-all ${
+                          paymentMethod === "kuraimi"
+                            ? "border-black bg-black/[0.02]"
+                            : "border-black/[0.08] hover:border-black/20"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="kuraimi"
+                          checked={paymentMethod === "kuraimi"}
+                          onChange={() => setPaymentMethod("kuraimi")}
+                          className="sr-only"
+                        />
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                          paymentMethod === "kuraimi" ? "border-black" : "border-black/20"
+                        }`}>
+                          {paymentMethod === "kuraimi" && <div className="w-2 h-2 rounded-full bg-black" />}
+                        </div>
+                        <Building2 className="w-5 h-5 text-black/40" strokeWidth={1.5} />
+                        <div>
+                          <p className="text-[12px] font-sans font-medium">{t.checkout.kuraimi}</p>
+                          <p className="text-[10px] font-sans text-black/30 mt-0.5">
+                            {isRTL ? kuraimiSettings.instructionsAr || "حوّل المبلغ إلى أحد الحسابات أدناه" : kuraimiSettings.instructions || "Transfer the amount to one of the accounts below"}
+                          </p>
+                        </div>
+                      </label>
+
+                      {/* Kuraimi Account Details (shown when selected) */}
+                      {paymentMethod === "kuraimi" && (
+                        <div className="mt-3 border border-black/[0.06] p-5 space-y-4 bg-black/[0.01]">
+                          {/* Beneficiary Name */}
+                          <div className="flex items-center justify-between p-3 bg-white border border-black/[0.06]">
+                            <div>
+                              <p className="text-[9px] font-sans tracking-luxury uppercase text-black/30">{t.checkout.beneficiary}</p>
+                              <p className="text-[13px] font-sans font-medium mt-1">{kuraimiSettings.beneficiaryName}</p>
+                            </div>
+                            <button type="button" onClick={() => copyToClipboard(kuraimiSettings.beneficiaryName)} className="p-2 hover:bg-black/[0.04] transition-colors">
+                              <Copy className="w-3.5 h-3.5 text-black/30" strokeWidth={1.5} />
+                            </button>
+                          </div>
+
+                          {/* Accounts Grid */}
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            {/* USD Account */}
+                            <div className="p-3 bg-white border border-black/[0.06]">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-[9px] font-sans tracking-luxury uppercase text-black/30">{t.checkout.accountUSD}</span>
+                                <span className="text-[9px] font-sans font-bold text-green-700 bg-green-50 px-1.5 py-0.5">USD $</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <p className="text-[13px] font-sans font-medium tabular-nums">{kuraimiSettings.accountUSD}</p>
+                                <button type="button" onClick={() => copyToClipboard(kuraimiSettings.accountUSD)} className="p-1 hover:bg-black/[0.04] transition-colors">
+                                  <Copy className="w-3 h-3 text-black/30" strokeWidth={1.5} />
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* YER Account */}
+                            <div className="p-3 bg-white border border-black/[0.06]">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-[9px] font-sans tracking-luxury uppercase text-black/30">{t.checkout.accountYER}</span>
+                                <span className="text-[9px] font-sans font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5">YER</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <p className="text-[13px] font-sans font-medium tabular-nums">{kuraimiSettings.accountYER}</p>
+                                <button type="button" onClick={() => copyToClipboard(kuraimiSettings.accountYER)} className="p-1 hover:bg-black/[0.04] transition-colors">
+                                  <Copy className="w-3 h-3 text-black/30" strokeWidth={1.5} />
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* SAR Account */}
+                            <div className="p-3 bg-white border border-black/[0.06]">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-[9px] font-sans tracking-luxury uppercase text-black/30">{t.checkout.accountSAR}</span>
+                                <span className="text-[9px] font-sans font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5">SAR</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <p className="text-[13px] font-sans font-medium tabular-nums">{kuraimiSettings.accountSAR}</p>
+                                <button type="button" onClick={() => copyToClipboard(kuraimiSettings.accountSAR)} className="p-1 hover:bg-black/[0.04] transition-colors">
+                                  <Copy className="w-3 h-3 text-black/30" strokeWidth={1.5} />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Transfer Reference Input */}
+                          <div>
+                            <Label className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-2 block">{t.checkout.transferReference} *</Label>
+                            <Input
+                              value={transferReference}
+                              onChange={e => setTransferReference(e.target.value)}
+                              placeholder={t.checkout.transferReferencePlaceholder}
+                              required={paymentMethod === "kuraimi"}
+                              className="rounded-none h-11 text-[13px] font-sans border-black/[0.08] bg-white focus:border-black/20 transition-all placeholder:text-black/15"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -325,6 +490,11 @@ export default function Checkout() {
                         <span className="tabular-nums text-green-700">-{formatPrice(discount)}</span>
                       </div>
                     )}
+                    {/* Payment Method Display */}
+                    <div className="flex justify-between text-[12px] font-sans">
+                      <span className="text-black/40">{t.checkout.paymentMethod}</span>
+                      <span className="text-[11px]">{paymentMethod === "kuraimi" ? t.checkout.kuraimi : t.checkout.cod}</span>
+                    </div>
                   </div>
 
                   <div className="flex justify-between items-baseline pt-4 border-t border-black/[0.04] mb-6">

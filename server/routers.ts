@@ -314,6 +314,8 @@ export const appRouter = router({
       shippingZipCode: z.string().max(20).optional(),
       notes: z.string().max(1000).transform(sanitizeHtml).optional(),
       couponCode: z.string().max(50).optional(),
+      paymentMethod: z.enum(["cod", "kuraimi"]).default("cod"),
+      transferReference: z.string().max(255).transform(sanitizeHtml).optional(),
     })).mutation(async ({ ctx, input }) => {
       const cartItemsList = await db.getCartItems(ctx.user.id);
       if (cartItemsList.length === 0) throw new TRPCError({ code: "BAD_REQUEST", message: "Cart is empty" });
@@ -364,6 +366,8 @@ export const appRouter = router({
         shippingCountry: input.shippingCountry,
         shippingZipCode: input.shippingZipCode,
         notes: input.notes,
+        paymentMethod: input.paymentMethod,
+        transferReference: input.transferReference,
       });
       if (orderId) {
         await db.addOrderItems(orderItemsData.map(i => ({ ...i, orderId })));
@@ -472,7 +476,7 @@ export const appRouter = router({
     }),
   }),
 
-  // ─── Settings (Exchange Rate) ────────────────────────
+  // ─── Settings (Exchange Rate + Kuraimi) ────────────────────────
   settings: router({
     getExchangeRate: publicProcedure.query(async () => {
       return db.getExchangeRate();
@@ -482,6 +486,21 @@ export const appRouter = router({
       enabled: z.boolean(),
     })).mutation(async ({ input }) => {
       await db.setExchangeRate(input.rate, input.enabled);
+      return { success: true };
+    }),
+    getKuraimiSettings: publicProcedure.query(async () => {
+      return db.getKuraimiSettings();
+    }),
+    updateKuraimiSettings: adminProcedure.input(z.object({
+      enabled: z.boolean(),
+      beneficiaryName: z.string().min(1).max(200),
+      accountUSD: z.string().min(1).max(100),
+      accountYER: z.string().min(1).max(100),
+      accountSAR: z.string().min(1).max(100),
+      instructions: z.string().max(1000).optional().default(""),
+      instructionsAr: z.string().max(1000).optional().default(""),
+    })).mutation(async ({ input }) => {
+      await db.setKuraimiSettings(input);
       return { success: true };
     }),
   }),
