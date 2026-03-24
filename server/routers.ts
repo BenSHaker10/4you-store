@@ -308,7 +308,7 @@ export const appRouter = router({
       shippingName: z.string().min(2).max(100).transform(sanitizeHtml),
       shippingEmail: z.string().email().max(320).transform(v => v.toLowerCase().trim()),
       shippingPhone: z.string().min(5).max(20).regex(/^[+\d\s()-]*$/, "Invalid phone"),
-      shippingAddress: z.string().min(5).max(500).transform(sanitizeHtml),
+      shippingAddress: z.string().max(500).transform(sanitizeHtml).optional().default(""),
       shippingCity: z.string().min(2).max(100).transform(sanitizeHtml),
       shippingCountry: z.string().min(2).max(100).transform(sanitizeHtml),
       shippingZipCode: z.string().max(20).optional(),
