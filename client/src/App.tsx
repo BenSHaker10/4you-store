@@ -1,3 +1,4 @@
+import Notebook from "./pages/Notebook";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -33,14 +34,17 @@ import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import BrandsBar from "./components/BrandsBar";
 
+
 function AppLayout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const authPages = ["/login", "/register", "/forgot-password", "/reset-password"];
   const isAuthPage = authPages.includes(location) || location.startsWith("/reset-password");
 
+
   if (isAuthPage) {
     return <>{children}</>;
   }
+
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -54,6 +58,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
+
 function Router() {
   return (
     <Switch>
@@ -64,49 +69,7 @@ function Router() {
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
       {/* Protected pages */}
-      <Route path="/" component={Home} />
+      <Route path="/notebook" component={Notebook} />
+        <Route path="/" component={Home} />
       <Route path="/products" component={Products} />
       <Route path="/product/:slug" component={ProductDetail} />
-      <Route path="/about" component={About} />
-      <Route path="/cart" component={Cart} />
-      <Route path="/checkout" component={Checkout} />
-      <Route path="/orders" component={Orders} />
-      <Route path="/orders/:id" component={OrderDetail} />
-      <Route path="/account" component={Account} />
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/products" component={AdminProducts} />
-      <Route path="/admin/products/new" component={AdminProductForm} />
-      <Route path="/admin/products/:id" component={AdminProductForm} />
-      <Route path="/admin/orders" component={AdminOrders} />
-      <Route path="/admin/categories" component={AdminCategories} />
-      <Route path="/admin/coupons" component={AdminCoupons} />
-      <Route path="/admin/settings" component={AdminSettings} />
-      <Route path="/404" component={NotFound} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
-
-function App() {
-  return (
-    <ErrorBoundary>
-      <LanguageProvider>
-      <ThemeProvider defaultTheme="light">
-        <TooltipProvider>
-          <CartProvider>
-            <Toaster />
-            <AuthGuard>
-              <AppLayout>
-                <Router />
-              </AppLayout>
-              <PWAInstallPrompt />
-            </AuthGuard>
-          </CartProvider>
-        </TooltipProvider>
-      </ThemeProvider>
-      </LanguageProvider>
-    </ErrorBoundary>
-  );
-}
-
-export default App;
