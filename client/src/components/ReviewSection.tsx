@@ -64,12 +64,12 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
   const { t, isRTL } = useLanguage();
   const utils = trpc.useUtils();
 
-  const { data: reviews = [], isLoading: loadingReviews } = trpc.reviews.byProduct.useQuery({ productId });
+  const { data: reviews = [], isLoading: loadingReviews } = trpc.reviews.list.useQuery({ productId });
   const { data: stats } = trpc.reviews.stats.useQuery({ productId });
 
-  const createReview = trpc.reviews.create.useMutation({
+  const createReview = trpc.reviews.add.useMutation({
     onSuccess: () => {
-      utils.reviews.byProduct.invalidate({ productId });
+      utils.reviews.list.invalidate({ productId });
       utils.reviews.stats.invalidate({ productId });
       toast.success(isRTL ? "تم إضافة تقييمك بنجاح" : "Review submitted");
       resetForm();
@@ -82,7 +82,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
   const uploadImage = trpc.reviews.uploadImage.useMutation();
   const deleteReview = trpc.reviews.delete.useMutation({
     onSuccess: () => {
-      utils.reviews.byProduct.invalidate({ productId });
+      utils.reviews.list.invalidate({ productId });
       utils.reviews.stats.invalidate({ productId });
       toast.success(isRTL ? "تم حذف التقييم" : "Review deleted");
     },

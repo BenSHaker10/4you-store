@@ -178,6 +178,24 @@ export const appRouter = router({
   }),
 
   // ─── Products ────────────────────────────────────────
+  reviews: router({
+    list: publicProcedure.input(z.object({ productId: z.number() })).query(async ({ input }) => {
+      return db.getProductReviews(input.productId);
+    }),
+    add: protectedProcedure.input(z.object({
+      productId: z.number(),
+      rating: z.number().min(1).max(5),
+      title: z.string().optional(),
+      comment: z.string().optional(),
+    })).mutation(async ({ ctx, input }) => {
+      return db.addProductReview({
+        ...input,
+        userId: ctx.user.id,
+        isApproved: true, // Auto-approve for now
+      });
+    }),
+  }),
+
   products: router({
     list: publicProcedure.input(z.object({
       categoryId: z.number().optional(), search: z.string().optional(),
