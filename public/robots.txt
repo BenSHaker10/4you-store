@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /api/*
+Disallow: /login
+Disallow: /register
+
+Sitemap: https://4you-stores.com/sitemap.xml
