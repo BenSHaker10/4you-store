@@ -1,0 +1,30 @@
+{
+  "name": "4 YOU - Premium Beauty Store",
+  "short_name": "4 YOU",
+  "description": "متجر 4 YOU للعطور والمكياج الفاخر - Premium Perfumes & Makeup",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#C4A24E",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["shopping", "beauty", "lifestyle"],
+  "icons": [
+    {
+      "src": "https://d2xsxph8kpxj0f.cloudfront.net/310419663030522584/MmHspuuRpmJpFJcsenBoBv/pwa-icon-512-LQHzFZFXKAMp7JGXV2Dtjg.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://d2xsxph8kpxj0f.cloudfront.net/310419663030522584/MmHspuuRpmJpFJcsenBoBv/pwa-icon-512-LQHzFZFXKAMp7JGXV2Dtjg.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

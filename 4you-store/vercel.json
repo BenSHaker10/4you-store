@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm install && vite build && esbuild server/vercel.ts --platform=node --packages=external --bundle --format=esm --outfile=api/index.js --alias:@shared=./shared",
+  "outputDirectory": "dist/public",
+  "installCommand": "pnpm install",
+  "framework": null,
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/((?!api).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
