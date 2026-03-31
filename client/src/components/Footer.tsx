@@ -161,7 +161,16 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="border-t border-white/[0.06] mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <span className="text-[10px] font-sans text-white/15 tracking-wide">&copy; {new Date().getFullYear()} 4You. {t.footer.rights}</span>
+          <div className="flex flex-col gap-2">
+            <span className="text-[10px] font-sans text-white/15 tracking-wide">&copy; {new Date().getFullYear()} 4You. {t.footer.rights}</span>
+            {isRTL && (
+              <div className="flex gap-4 text-[10px] font-sans text-white/15">
+                <span>{t.footer.commercialRegister}</span>
+                <span>|</span>
+                <span>{t.footer.vatNumber}</span>
+              </div>
+            )}
+          </div>
           <div className="flex gap-8 items-center">
             <a href={`https://www.instagram.com/${instagramUser}`} target="_blank" rel="noopener noreferrer" className="text-[10px] font-sans text-white/15 hover:text-white/40 transition-colors">
               @{instagramUser}

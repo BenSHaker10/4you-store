@@ -21,6 +21,7 @@ const ar: Translations = {
     logout: "تسجيل الخروج",
     myOrders: "طلباتي",
     adminPanel: "لوحة الإدارة",
+    trackOrder: "تتبع الطلب",
   },
 
   // Top bar
@@ -288,15 +289,44 @@ const ar: Translations = {
     faq: "الأسئلة الشائعة",
     privacyPolicy: "سياسة الخصوصية",
     contactUs: "تواصل معنا",
-    email: "support@4you.com",
+    email: "support@4you-stores.com",
     phone: "+966 50 000 0000",
     rights: "جميع الحقوق محفوظة.",
+    commercialRegister: "سجل تجاري رقم: 1010XXXXXX",
+    vatNumber: "الرقم الضريبي: 300XXXXXXXXX3",
+    address: "الرياض، المملكة العربية السعودية",
     freeShipping: "شحن مجاني",
     freeShippingDesc: "للطلبات فوق 250 ريال",
     support: "دعم على مدار الساعة",
     supportDesc: "تواصل معنا في أي وقت",
     securePayment: "دفع آمن",
     securePaymentDesc: "عملية دفع آمنة 100%",
+  },
+
+  // Testimonials
+  testimonials: {
+    title: "ماذا يقول عملاؤنا",
+    subtitle: "ثقة عملائنا هي سر نجاحنا",
+    items: [
+      {
+        name: "سارة محمد",
+        role: "عميلة دائمة",
+        content: "أفضل متجر للعطور في السعودية! المنتجات أصلية 100% والتوصيل سريع جداً. أنصح به بشدة.",
+        avatar: "SM"
+      },
+      {
+        name: "نورة القحطاني",
+        role: "خبيرة تجميل",
+        content: "جودة المكياج مذهلة، وتغليف الهدايا لديهم قمة في الأناقة. شكراً 4 YOU.",
+        avatar: "NK"
+      },
+      {
+        name: "ليلى أحمد",
+        role: "عميلة جديدة",
+        content: "تجربة تسوق رائعة، الموقع سهل الاستخدام وخدمة العملاء متعاونة جداً.",
+        avatar: "LA"
+      }
+    ]
   },
 
   // Admin
