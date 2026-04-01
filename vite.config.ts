@@ -1,12 +1,9 @@
-import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "node:path";
 import { defineConfig } from "vite";
 
-const plugins = [react(), tailwindcss()];
-
 export default defineConfig({
-  plugins,
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -46,11 +43,6 @@ export default defineConfig({
       protocol: "ws",
       host: "127.0.0.1",
       port: 5173,
-    },
-  },
-  optimize: {
-    esbuild: {
-      target: "esnext",
     },
   },
 });
