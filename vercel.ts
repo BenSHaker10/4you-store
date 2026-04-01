@@ -1,10 +1,15 @@
 import "dotenv/config";
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { registerOAuthRoutes } from "./_core/oauth";
-import { appRouter } from "./routers";
-import { createContext } from "./_core/context";
-import { generalLimiter, authLimiter, setupSecurityHeaders } from "./security";
+import { registerOAuthRoutes } from "./server/_core/oauth";
+import { appRouter } from "./server/routers";
+import { createContext } from "./server/_core/context";
+import { generalLimiter, authLimiter, setupSecurityHeaders } from "./server/security";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -29,13 +34,23 @@ app.use(
   })
 );
 
-// Start server if not running as a serverless function
-const PORT = process.env.PORT || 3000;
-if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+// Static files and SPA handling in production
+if (process.env.NODE_ENV === "production") {
+  const publicPath = path.resolve(__dirname, "public");
+  app.use(express.static(publicPath));
+  
+  app.get("*", (req, res) => {
+    if (!req.path.startsWith("/api")) {
+      res.sendFile(path.join(publicPath, "index.html"));
+    }
   });
 }
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 // Export the Express app for Vercel Serverless Function
 export default app;
