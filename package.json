@@ -71,7 +71,8 @@
     "wouter": "^3.3.5",
     "zod": "^3.23.8",
     "superjson": "^2.2.1",
-    "tw-animate-css": "^1.0.0"
+    "tw-animate-css": "^1.0.0",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@replit/vite-plugin-cartographer": "^0.0.4",
