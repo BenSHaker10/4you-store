@@ -1,22 +1,6 @@
 {
   "version": 2,
-  "framework": "vite",
-  "buildCommand": "npm install --legacy-peer-deps && vite build && npx esbuild server/vercel.ts --bundle --platform=node --outfile=api/index.js --format=cjs --external:mysql2 --external:bcrypt --external:bcryptjs --external:sharp --external:jose --external:nodemailer --external:@node-rs/argon2 --external:@node-rs/bcrypt",
-  "installCommand": "npm install --legacy-peer-deps",
-  "outputDirectory": "dist/public",
-  "functions": {
-    "api/index.js": {
-      "includeFiles": "node_modules/**"
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  "github": {
+    "enabled": false
+  }
 }
