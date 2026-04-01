@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build && esbuild server/vercel.ts --bundle --platform=node --outfile=api/index.js --format=esm --external:mysql2 --external:express --external:express-session --external:passport --external:passport-local --external:drizzle-orm --external:@trpc/server --external:superjson --external:dotenv",
+    "build": "vite build && esbuild server/vercel.ts --bundle --platform=node --outfile=api/index.js --format=cjs --external:mysql2 --external:bcrypt --external:sharp --loader:.node=file",
     "preview": "vite preview",
     "check": "tsc",
     "db:push": "drizzle-kit push",
