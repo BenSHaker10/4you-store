@@ -789,31 +789,3 @@ export async function deleteExpiredPasswordResetTokens() {
   await db.delete(passwordResetTokens)
     .where(lt(passwordResetTokens.expiresAt, new Date()));
 }
-
-// ─── Product Reviews ────────────────────────────────────
-export async function getProductReviews(productId: number) {
-  const db = await getDb();
-  if (!db) return [];
-  const reviews = await db.select().from(productReviews).where(and(eq(productReviews.productId, productId), eq(productReviews.isApproved, true))).orderBy(desc(productReviews.createdAt));
-  const enriched = [];
-  for (const review of reviews) {
-    const user = await getUserById(review.userId);
-    const images = await db.select().from(reviewImages).where(eq(reviewImages.reviewId, review.id));
-    enriched.push({ ...review, user: user ? { name: user.name } : null, images });
-  }
-  return enriched;
-}
-
-export async function addProductReview(data: InsertProductReview) {
-  const db = await getDb();
-  if (!db) return;
-  const result = await db.insert(productReviews).values(data);
-  return result[0].insertId;
-}
-
-export async function getUserById(id: number) {
-  const db = await getDb();
-  if (!db) return undefined;
-  const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
-  return result[0];
-}
