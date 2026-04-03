@@ -48,7 +48,7 @@ export default function Checkout() {
     onSuccess: (data) => {
       setAppliedCoupon(data);
       setCouponCode("");
-      toast.success(isRTL ? `تم تطبيق الكوبون! خصم ${data.discount} ر.س` : `Coupon applied! ${data.discount} SAR discount`);
+      toast.success(`${t.common.success} - ${data.discount} ${t.product.sar}`);
     },
     onError: (err) => {
       toast.error(err.message);
@@ -62,7 +62,7 @@ export default function Checkout() {
       navigate(`/orders/${data.orderId}`);
     },
     onError: (err) => {
-      toast.error(err.message || (isRTL ? "فشل في تقديم الطلب" : "Failed to place order"));
+      toast.error(err.message || (t.common.failed));
     },
   });
 
@@ -93,17 +93,17 @@ export default function Checkout() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast.success(isRTL ? "تم النسخ!" : "Copied!");
+    toast.success(t.checkout.copied);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.shippingName || !form.shippingEmail || !form.shippingPhone || !form.shippingAddress || !form.shippingCity || !form.shippingCountry) {
-      toast.error(isRTL ? "يرجى ملء جميع الحقول المطلوبة" : "Please fill in all required fields");
+      toast.error(t.common.required);
       return;
     }
     if (paymentMethod === "kuraimi" && !transferReference.trim()) {
-      toast.error(isRTL ? "يرجى إدخال رقم الحوالة" : "Please enter the transfer reference number");
+      toast.error(t.common.required);
       return;
     }
     setSubmitting(true);
@@ -143,12 +143,12 @@ export default function Checkout() {
   const steps = [
     { num: 1, label: t.cart.title, done: true },
     { num: 2, label: t.checkout.shippingInfo, active: true },
-    { num: 3, label: isRTL ? "الدفع" : "Payment", done: false },
+    { num: 3, label: t.checkout.step3, done: false },
   ];
 
   return (
     <div className="min-h-screen bg-white">
-      <SEOHead title={isRTL ? "إتمام الطلب" : "Checkout"} url="/checkout" noindex />
+      <SEOHead title={t.checkout.title} url="/checkout" noindex />
       {/* Breadcrumb */}
       <div className="border-b border-black/[0.04]">
         <div className="container py-4">
@@ -268,7 +268,7 @@ export default function Checkout() {
                     <div>
                       <p className="text-[12px] font-sans font-medium">{t.checkout.cod}</p>
                       <p className="text-[10px] font-sans text-black/30 mt-0.5">
-                        {isRTL ? "ادفع نقداً عند استلام طلبك" : "Pay cash when you receive your order"}
+                        {t.checkout.payOnDelivery}
                       </p>
                     </div>
                   </label>
@@ -300,7 +300,7 @@ export default function Checkout() {
                         <div>
                           <p className="text-[12px] font-sans font-medium">{t.checkout.kuraimi}</p>
                           <p className="text-[10px] font-sans text-black/30 mt-0.5">
-                            {isRTL ? kuraimiSettings.instructionsAr || "حوّل المبلغ إلى أحد الحسابات أدناه" : kuraimiSettings.instructions || "Transfer the amount to one of the accounts below"}
+                            {isRTL ? (kuraimiSettings.instructionsAr || t.checkout.transferInstructions) : (kuraimiSettings.instructions || t.checkout.transferInstructions)}
                           </p>
                         </div>
                       </label>
@@ -386,7 +386,7 @@ export default function Checkout() {
               <div className="border border-black/[0.06] p-6 md:p-8">
                 <h2 className="text-[10px] font-sans tracking-luxury uppercase text-black/40 mb-6 flex items-center gap-3">
                   <Tag className="w-3.5 h-3.5" strokeWidth={1.5} />
-                  {isRTL ? "كوبون الخصم" : "Discount Code"}
+                  {t.admin.coupons}
                 </h2>
 
                 {appliedCoupon ? (
@@ -420,7 +420,7 @@ export default function Checkout() {
                     <Input
                       value={couponCode}
                       onChange={e => setCouponCode(e.target.value.toUpperCase())}
-                      placeholder={isRTL ? "أدخل كود الخصم" : "Enter discount code"}
+                      placeholder={t.admin.coupons}
                       className="rounded-none h-11 text-[13px] font-sans border-black/[0.08] bg-white focus:border-black/20 transition-all placeholder:text-black/15 uppercase tracking-wider flex-1"
                       onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); handleApplyCoupon(); } }}
                     />
@@ -433,7 +433,7 @@ export default function Checkout() {
                       {couponLoading ? (
                         <Loader2 className="w-3.5 h-3.5 animate-spin" />
                       ) : (
-                        isRTL ? "تطبيق" : "Apply"
+                        t.common.submit
                       )}
                     </Button>
                   </div>
@@ -444,7 +444,7 @@ export default function Checkout() {
               <div className="flex items-center gap-3 px-5 py-3.5 border border-black/[0.04]">
                 <Lock className="w-3 h-3 text-black/20 shrink-0" strokeWidth={1.5} />
                 <p className="text-[10px] font-sans text-black/25">
-                  {isRTL ? "جميع بياناتك مشفرة ومحمية بأعلى معايير الأمان" : "All your data is encrypted and protected with the highest security standards"}
+                  {t.checkout.orderProtected}
                 </p>
               </div>
             </div>
@@ -487,7 +487,7 @@ export default function Checkout() {
                       <div className="flex justify-between text-[12px] font-sans">
                         <span className="text-black/40 flex items-center gap-1.5">
                           <Tag className="w-3 h-3" strokeWidth={1.5} />
-                          {isRTL ? "الخصم" : "Discount"}
+                          {t.admin.coupons}
                           <span className="text-[9px] text-black/25 uppercase">({appliedCoupon.code})</span>
                         </span>
                         <span className="tabular-nums text-green-700">-{formatPrice(discount)}</span>
@@ -513,7 +513,7 @@ export default function Checkout() {
                     {submitting ? (
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 border border-white/30 border-t-white animate-spin" />
-                        {isRTL ? "جاري التنفيذ..." : "Processing..."}
+                        {t.checkout.processing}
                       </div>
                     ) : (
                       <>
@@ -525,9 +525,9 @@ export default function Checkout() {
 
                   <div className="mt-6 space-y-3">
                     {[
-                      { icon: Truck, text: isRTL ? "شحن مجاني فوق 250 ريال" : "Free shipping over 250 SAR" },
-                      { icon: RotateCcw, text: isRTL ? "إرجاع مجاني خلال 14 يوم" : "14-day free returns" },
-                      { icon: Shield, text: isRTL ? "دفع آمن ومشفر" : "Secure encrypted payment" },
+                      { icon: Truck, text: t.cart.freeShippingOver },
+                      { icon: RotateCcw, text: t.cart.easyReturns },
+                      { icon: Shield, text: t.checkout.secureCheckout },
                     ].map((item, i) => (
                       <div key={i} className="flex items-center gap-2.5 text-[10px] font-sans text-black/25">
                         <item.icon className="w-3 h-3 shrink-0" strokeWidth={1.5} />

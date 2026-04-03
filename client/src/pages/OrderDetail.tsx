@@ -66,7 +66,7 @@ export default function OrderDetail() {
         <h2 className="text-xl font-bold mb-4">{isRTL ? "الطلب غير موجود" : "Order Not Found"}</h2>
         <Link href="/orders">
           <Button variant="outline" className="rounded-full">
-            {isRTL ? "العودة للطلبات" : "Back to Orders"}
+            {t.orderDetail.backToOrders}
           </Button>
         </Link>
       </div>
@@ -88,7 +88,7 @@ export default function OrderDetail() {
             <span>/</span>
             <Link href="/orders" className="hover:text-foreground transition-colors">{t.orders.title}</Link>
             <span>/</span>
-            <span className="text-foreground font-medium">{isRTL ? `طلب #${order.id}` : `Order #${order.id}`}</span>
+            <span className="text-foreground font-medium">{`${t.orderDetail.orderNumber}${order.id}`}</span>
           </div>
         </div>
       </div>
@@ -98,10 +98,10 @@ export default function OrderDetail() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
-              {isRTL ? `طلب #${order.id}` : `Order #${order.id}`}
+              {`${t.orderDetail.orderNumber}${order.id}`}
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              {isRTL ? "تم الطلب في " : "Placed on "}
+              {t.orderDetail.orderDate}: 
               {new Date(order.createdAt).toLocaleDateString(isRTL ? "ar-SA" : "en-US", { year: "numeric", month: "long", day: "numeric" })}
             </p>
           </div>
@@ -134,10 +134,10 @@ export default function OrderDetail() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-red-800">
-                  {isRTL ? "تم إلغاء هذا الطلب" : "This order has been cancelled"}
+                  {t.orderDetail.orderCancelled}
                 </h3>
                 <p className="text-xs text-red-600 mt-0.5">
-                  {isRTL ? "إذا كان لديك أي استفسار، يرجى التواصل معنا" : "If you have any questions, please contact us"}
+                  {t.orderDetail.contactSupport}
                 </p>
               </div>
             </div>
@@ -145,7 +145,7 @@ export default function OrderDetail() {
         ) : (
           <div className="border border-border/40 bg-card rounded-2xl p-6 mb-6">
             <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-6">
-              {isRTL ? "تقدم الطلب" : "Order Progress"}
+              {t.orderDetail.orderTimeline}
             </h3>
             <div className="flex items-center justify-between relative">
               {statusSteps.map((step, i) => {
@@ -192,7 +192,7 @@ export default function OrderDetail() {
             <div className="border border-border/40 bg-card rounded-2xl overflow-hidden">
               <div className="px-6 py-4 border-b border-border/40">
                 <h2 className="text-sm font-bold" style={{ fontFamily: "var(--font-display)" }}>
-                  {isRTL ? "عناصر الطلب" : "Order Items"}
+                  {t.checkout.orderItems}
                 </h2>
               </div>
               <div className="divide-y divide-border/40">
@@ -209,11 +209,11 @@ export default function OrderDetail() {
                         <p className="text-[11px] text-muted-foreground mt-0.5">{item.optionName}: {item.optionValue}</p>
                       )}
                       <p className="text-[11px] text-muted-foreground mt-1">
-                        {isRTL ? `الكمية: ${item.quantity} × ${parseFloat(item.unitPrice).toFixed(2)}` : `Qty: ${item.quantity} × ${parseFloat(item.unitPrice).toFixed(2)}`} {isRTL ? "ر.س" : "SAR"}
+                        {`${t.orderDetail.quantity}: ${item.quantity} × ${parseFloat(item.unitPrice).toFixed(2)}`} {t.product.sar}
                       </p>
                     </div>
                     <div className="text-right shrink-0">
-                      <span className="text-sm font-bold">{parseFloat(item.totalPrice).toFixed(2)} {isRTL ? "ر.س" : "SAR"}</span>
+                      <span className="text-sm font-bold">{parseFloat(item.totalPrice).toFixed(2)} {t.product.sar}</span>
                     </div>
                   </div>
                 ))}
@@ -223,12 +223,12 @@ export default function OrderDetail() {
                 {order.discountAmount && parseFloat(order.discountAmount) > 0 && (
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-xs text-green-600 font-medium">{isRTL ? "خصم الكوبون" : "Coupon Discount"} {order.couponCode ? `(${order.couponCode})` : ""}</span>
-                    <span className="text-xs text-green-600 font-semibold">-{parseFloat(order.discountAmount).toFixed(2)} {isRTL ? "ر.س" : "SAR"}</span>
+                    <span className="text-xs text-green-600 font-semibold">-{parseFloat(order.discountAmount).toFixed(2)} {t.product.sar}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-bold">{isRTL ? "الإجمالي" : "Total"}</span>
-                  <span className="text-xl font-bold">{parseFloat(order.totalAmount).toFixed(2)} {isRTL ? "ر.س" : "SAR"}</span>
+                  <span className="text-xl font-bold">{parseFloat(order.totalAmount).toFixed(2)} {t.product.sar}</span>
                 </div>
               </div>
             </div>
@@ -240,7 +240,7 @@ export default function OrderDetail() {
             <div className="border border-border/40 bg-card rounded-2xl overflow-hidden">
               <div className="px-6 py-4 border-b border-border/40">
                 <h2 className="text-sm font-bold" style={{ fontFamily: "var(--font-display)" }}>
-                  {isRTL ? "معلومات الدفع" : "Payment Information"}
+                  {t.orderDetail.paymentMethod}
                 </h2>
               </div>
               <div className="p-6 space-y-4">
@@ -251,7 +251,7 @@ export default function OrderDetail() {
                   </div>
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                      {isRTL ? "طريقة الدفع" : "Payment Method"}
+                      {t.orderDetail.paymentMethod}
                     </p>
                     <p className="text-sm font-medium">{getPaymentMethodLabel(paymentMethod)}</p>
                   </div>
@@ -263,7 +263,7 @@ export default function OrderDetail() {
                   </div>
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                      {isRTL ? "حالة الدفع" : "Payment Status"}
+                      {t.orderDetail.status}
                     </p>
                     <span className={`inline-flex items-center gap-1.5 mt-1 px-2.5 py-1 border text-[11px] font-semibold rounded-full ${
                       order.paymentStatus === "paid"
@@ -271,7 +271,7 @@ export default function OrderDetail() {
                         : "bg-amber-50 border-amber-100 text-amber-700"
                     }`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${order.paymentStatus === "paid" ? "bg-green-500" : "bg-amber-500"}`} />
-                      {isRTL ? (order.paymentStatus === "paid" ? "مدفوع" : "قيد الانتظار") : (order.paymentStatus === "paid" ? "Paid" : "Unpaid")}
+                      {order.paymentStatus === "paid" ? t.orderDetail.delivered : t.orderDetail.pending}
                     </span>
                   </div>
                 </div>
@@ -283,7 +283,7 @@ export default function OrderDetail() {
                     </div>
                     <div>
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                        {isRTL ? "رقم الحوالة" : "Transfer Reference"}
+                        {t.checkout.transferReference}
                       </p>
                       <p className="text-sm font-mono font-semibold bg-blue-50 text-blue-700 px-2 py-1 rounded border border-blue-200 mt-1 inline-block">
                         {transferReference}
@@ -298,7 +298,7 @@ export default function OrderDetail() {
             <div className="border border-border/40 bg-card rounded-2xl overflow-hidden">
               <div className="px-6 py-4 border-b border-border/40">
                 <h2 className="text-sm font-bold" style={{ fontFamily: "var(--font-display)" }}>
-                  {isRTL ? "معلومات الشحن" : "Shipping Details"}
+                  {t.orderDetail.shippingAddress}
                 </h2>
               </div>
               <div className="p-6 space-y-4">
@@ -354,7 +354,7 @@ export default function OrderDetail() {
 
             <Link href="/orders" className="block">
               <Button variant="outline" className="w-full rounded-full gap-2 font-semibold">
-                <BackIcon className="w-4 h-4" /> {isRTL ? "العودة للطلبات" : "Back to Orders"}
+                <BackIcon className="w-4 h-4" /> {t.orderDetail.backToOrders}
               </Button>
             </Link>
           </div>

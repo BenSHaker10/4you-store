@@ -17,18 +17,18 @@ export default function Login() {
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: () => {
-      toast.success(isRTL ? "مرحباً بعودتك" : "Welcome back");
+      toast.success(t.auth.loginTitle);
       window.location.href = "/";
     },
     onError: (err) => {
-      toast.error(err.message || (isRTL ? "بريد إلكتروني أو كلمة مرور غير صحيحة" : "Invalid email or password"));
+      toast.error(err.message || (t.common.error));
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      toast.error(isRTL ? "يرجى ملء جميع الحقول" : "Please fill in all fields");
+      toast.error(t.common.required);
       return;
     }
     loginMutation.mutate({ email, password });
@@ -77,7 +77,7 @@ export default function Login() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder={isRTL ? "بريدك@email.com" : "your@email.com"}
+                  placeholder={t.auth.emailPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={`${isRTL ? "pr-10" : "pl-10"} h-11 rounded-none border-black/[0.08] text-[13px] font-sans focus:border-black/20 transition-all placeholder:text-black/15`}
@@ -93,7 +93,7 @@ export default function Login() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder={isRTL ? "أدخل كلمة المرور" : "Enter your password"}
+                  placeholder={t.auth.passwordPlaceholder}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className={`${isRTL ? "pr-10 pl-10" : "pl-10 pr-10"} h-11 rounded-none border-black/[0.08] text-[13px] font-sans focus:border-black/20 transition-all placeholder:text-black/15`}
@@ -111,7 +111,7 @@ export default function Login() {
 
             <div className="flex justify-end">
               <Link href="/forgot-password" className="text-[11px] font-sans text-black/30 hover:text-black/60 transition-colors underline underline-offset-4 decoration-black/10">
-                {isRTL ? "نسيت كلمة المرور؟" : "Forgot password?"}
+                {t.auth.forgotPassword}
               </Link>
             </div>
 
@@ -123,7 +123,7 @@ export default function Login() {
               {loginMutation.isPending ? (
                 <span className="flex items-center gap-2">
                   <span className="w-3 h-3 border border-white/30 border-t-white animate-spin" />
-                  {isRTL ? "جاري تسجيل الدخول..." : "Signing in..."}
+                  {t.auth.loggingIn}
                 </span>
               ) : t.auth.signIn}
             </Button>

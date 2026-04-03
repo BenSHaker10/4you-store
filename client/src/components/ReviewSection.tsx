@@ -71,11 +71,11 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
     onSuccess: () => {
       utils.reviews.list.invalidate({ productId });
       utils.reviews.stats.invalidate({ productId });
-      toast.success(isRTL ? "تم إضافة تقييمك بنجاح" : "Review submitted");
+      toast.success(t.review.reviewSubmitted);
       resetForm();
     },
     onError: (err) => {
-      toast.error(err.message || (isRTL ? "فشل في إضافة التقييم" : "Failed to submit review"));
+      toast.error(err.message || (t.common.failed));
     },
   });
 
@@ -84,7 +84,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
     onSuccess: () => {
       utils.reviews.list.invalidate({ productId });
       utils.reviews.stats.invalidate({ productId });
-      toast.success(isRTL ? "تم حذف التقييم" : "Review deleted");
+      toast.success(t.common.success);
     },
   });
 
@@ -111,7 +111,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
     try {
       for (const file of Array.from(files)) {
         if (file.size > 5 * 1024 * 1024) {
-          toast.error(isRTL ? "حجم الصورة يجب أن يكون أقل من 5 ميجابايت" : "Image must be under 5MB");
+          toast.error(t.common.error);
           continue;
         }
         const base64 = await new Promise<string>((resolve) => {
@@ -123,7 +123,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
         setImages((prev) => [...prev, result.url]);
       }
     } catch {
-      toast.error(isRTL ? "فشل في رفع الصورة" : "Failed to upload image");
+      toast.error(t.common.failed);
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -133,7 +133,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (rating === 0) {
-      toast.error(isRTL ? "يرجى اختيار تقييم" : "Please select a rating");
+      toast.error(t.common.required);
       return;
     }
     createReview.mutate({
@@ -155,10 +155,10 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
       <div className="flex items-end justify-between mb-12">
         <div>
           <p className="text-[9px] font-sans tracking-luxury uppercase text-black/25 mb-2">
-            {isRTL ? "آراء العملاء" : "Customer Reviews"}
+            {t.home.whatTheySay}
           </p>
           <h2 className="font-heading text-2xl md:text-3xl italic">
-            {isRTL ? "التقييمات والمراجعات" : "Reviews"}
+            {t.productDetail.reviews}
           </h2>
         </div>
         {isAuthenticated && (
@@ -168,7 +168,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
             onClick={() => setShowForm(!showForm)}
           >
             <MessageSquare className="w-3 h-3" strokeWidth={1.5} />
-            {isRTL ? "اكتب تقييم" : "Write a Review"}
+            {t.review.writeReview}
           </Button>
         )}
       </div>
@@ -181,7 +181,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
           </div>
           <StarRating rating={Math.round(avgRating)} size="md" />
           <p className="text-[11px] font-sans text-black/25 mt-2.5">
-            {totalReviews} {isRTL ? "تقييم" : totalReviews === 1 ? "review" : "reviews"}
+            {totalReviews} {t.productDetail.reviews}
           </p>
         </div>
 
@@ -201,37 +201,37 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
       {showForm && isAuthenticated && (
         <div className="mb-12 p-6 md:p-8 border border-black/[0.06] animate-in fade-in slide-in-from-top-2 duration-300">
           <h3 className="font-heading text-lg italic mb-6">
-            {isRTL ? "شاركنا رأيك" : "Share Your Experience"}
+            {t.review.writeReview}
           </h3>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-3 block">
-                {isRTL ? "تقييمك" : "Your Rating"} *
+                {t.review.yourRating} *
               </label>
               <StarRating rating={rating} size="lg" interactive onChange={setRating} />
             </div>
 
             <div>
               <label className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-2 block">
-                {isRTL ? "عنوان التقييم" : "Review Title"}
+                {t.review.writeReview}
               </label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder={isRTL ? "ملخص تجربتك..." : "Summarize your experience..."}
+                placeholder={t.review.reviewPlaceholder}
                 className="w-full px-4 py-3 bg-white border border-black/[0.08] text-[13px] font-sans focus:outline-none focus:border-black/20 transition-all duration-300 placeholder:text-black/20"
               />
             </div>
 
             <div>
               <label className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-2 block">
-                {isRTL ? "تفاصيل التقييم" : "Review Details"}
+                {t.review.writeReview}
               </label>
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder={isRTL ? "شاركنا تجربتك مع هذا المنتج..." : "Tell us about your experience..."}
+                placeholder={t.review.reviewPlaceholder}
                 rows={4}
                 className="w-full px-4 py-3 bg-white border border-black/[0.08] text-[13px] font-sans focus:outline-none focus:border-black/20 transition-all duration-300 placeholder:text-black/20 resize-none"
               />
@@ -239,7 +239,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
 
             <div>
               <label className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-3 block">
-                {isRTL ? "أضف صور" : "Add Photos"}
+                {t.common.submit}
               </label>
               <div className="flex flex-wrap gap-3">
                 {images.map((url, i) => (
@@ -278,7 +278,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
                 disabled={createReview.isPending || rating === 0}
                 className="rounded-none font-sans text-[10px] tracking-luxury uppercase px-8 h-10 bg-black hover:bg-black/90 text-white"
               >
-                {createReview.isPending ? (isRTL ? "جاري الإرسال..." : "Submitting...") : (isRTL ? "إرسال التقييم" : "Submit Review")}
+                {createReview.isPending ? (t.review.submitting) : (t.review.submitReview)}
               </Button>
               <Button
                 type="button"
@@ -286,7 +286,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
                 onClick={resetForm}
                 className="rounded-none font-sans text-[10px] tracking-luxury uppercase px-6 h-10 border-black/10 hover:bg-black/[0.03]"
               >
-                {isRTL ? "إلغاء" : "Cancel"}
+                {t.common.cancel}
               </Button>
             </div>
           </form>
@@ -297,14 +297,14 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
       {!isAuthenticated && (
         <div className="mb-12 py-8 text-center border border-black/[0.04]">
           <p className="text-[12px] font-sans text-black/30 mb-4">
-            {isRTL ? "سجل دخولك لكتابة تقييم" : "Sign in to write a review"}
+            {t.review.loginToReview}
           </p>
           <Button
             variant="outline"
             className="rounded-none font-sans text-[10px] tracking-luxury uppercase px-8 h-10 border-black/15 hover:bg-black hover:text-white transition-all duration-300"
             onClick={() => { window.location.href = getLoginUrl(); }}
           >
-            {isRTL ? "تسجيل الدخول" : "Sign In"}
+            {t.auth.signIn}
           </Button>
         </div>
       )}
@@ -361,7 +361,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
                     </span>
                     <span className="flex items-center gap-1 text-[9px] font-sans text-black/20">
                       <CheckCircle className="w-2.5 h-2.5" strokeWidth={1.5} />
-                      {isRTL ? "مشتري موثق" : "Verified"}
+                      {t.review.verified}
                     </span>
                   </div>
                 </div>
@@ -381,7 +381,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
       ) : (
         <div className="text-center py-12">
           <p className="text-[12px] font-sans text-black/20 italic">
-            {isRTL ? "لا توجد تقييمات بعد. كن أول من يقيّم هذا المنتج." : "No reviews yet. Be the first to review this product."}
+            {t.review.noReviews}
           </p>
         </div>
       )}

@@ -96,15 +96,15 @@ const valuesAr = [
 
 export default function About() {
   const { t, isRTL } = useLanguage();
-  const timeline = isRTL ? timelineAr : timelineEn;
-  const values = isRTL ? valuesAr : valuesEn;
+  const timeline = t.about.timeline;
+  const values = t.about.values;
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
   return (
     <div className="bg-white text-foreground">
       <SEOHead
-        title={isRTL ? "من نحن" : "About Us"}
-        description={isRTL ? "تعرف على قصة 4 YOU - وجهتك الأولى للعطور الفاخرة والمكياج والعناية بالبشرة" : "Learn about 4 YOU - Your premier destination for luxury perfumes, makeup and skincare"}
+        title={t.about.title}
+        description={t.about.description}
         url="/about"
       />
 
@@ -117,21 +117,14 @@ export default function About() {
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
           <Section animation="animate-on-scroll">
             <p className="text-[10px] md:text-[11px] tracking-luxury uppercase text-white/40 font-sans mb-6">
-              {isRTL ? "قصتنا" : "Our Story"}
+              {t.about.ourStory}
             </p>
             <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl text-white italic leading-[1.15] mb-6">
-              {isRTL ? (
-                <>أكثر من متجر.<br /><span className="text-white/60">تجربة مُنتقاة.</span></>
-              ) : (
-                <>More Than a Store.<br /><span className="text-white/60">A Curated Experience.</span></>
-              )}
+              <>{t.about.heroTitle1}<br /><span className="text-white/60">{t.about.heroTitle2}</span></>
             </h1>
             <div className="w-12 h-px bg-white/20 mx-auto mb-6" />
             <p className="text-[13px] md:text-[15px] font-sans text-white/50 max-w-xl mx-auto leading-relaxed">
-              {isRTL
-                ? "4You ليس مجرد متجر. إنه تجربة مُصمّمة بعناية لمن يقدّرون الأناقة والبساطة والجودة."
-                : "4You is not just a store. It is a curated experience designed for those who value elegance, simplicity, and quality."
-              }
+              {t.about.heroDesc}
             </p>
           </Section>
         </div>
@@ -147,7 +140,7 @@ export default function About() {
           <Section>
             <div className="max-w-3xl mx-auto text-center">
               <p className="text-[10px] tracking-luxury uppercase text-muted-foreground/50 font-sans mb-4">
-                {isRTL ? "فلسفتنا" : "Our Philosophy"}
+                {t.about.ourPhilosophy}
               </p>
               <div className="w-10 h-px bg-foreground/10 mx-auto mb-10" />
               <blockquote className="font-heading text-2xl md:text-3xl lg:text-4xl italic text-foreground/80 leading-relaxed mb-8">
@@ -159,7 +152,7 @@ export default function About() {
               <div className="flex items-center justify-center gap-3">
                 <div className="w-8 h-px bg-foreground/15" />
                 <span className="text-[10px] tracking-luxury uppercase text-muted-foreground/40 font-sans">
-                  {isRTL ? "مؤسس 4You" : "Founder of 4You"}
+                  {t.about.founderTitle}
                 </span>
                 <div className="w-8 h-px bg-foreground/15" />
               </div>
@@ -179,10 +172,10 @@ export default function About() {
           <Section animation="animate-slide-left" className="flex items-center px-8 md:px-16 lg:px-24 py-16 md:py-0 bg-secondary/30">
             <div>
               <p className="text-[10px] tracking-luxury uppercase text-muted-foreground/40 font-sans mb-4">
-                {isRTL ? "الحرفة" : "The Craft"}
+                {t.about.theCraft}
               </p>
               <h2 className="font-heading text-3xl md:text-4xl italic text-foreground mb-6 leading-tight">
-                {isRTL ? "انتقاء لا يعرف المساومة" : "Uncompromising Curation"}
+                {t.about.craftTitle}
               </h2>
               <div className="w-10 h-px bg-foreground/10 mb-8" />
               <p className="text-[13px] font-sans text-muted-foreground/60 leading-[1.9] mb-6">
@@ -209,10 +202,10 @@ export default function About() {
           <Section animation="animate-slide-right" className="flex items-center px-8 md:px-16 lg:px-24 py-16 md:py-0 bg-white order-2 md:order-1">
             <div>
               <p className="text-[10px] tracking-luxury uppercase text-muted-foreground/40 font-sans mb-4">
-                {isRTL ? "التجربة" : "The Experience"}
+                {t.about.theExperience}
               </p>
               <h2 className="font-heading text-3xl md:text-4xl italic text-foreground mb-6 leading-tight">
-                {isRTL ? "فخامة في كل تفصيل" : "Luxury in Every Detail"}
+                {t.about.experienceTitle}
               </h2>
               <div className="w-10 h-px bg-foreground/10 mb-8" />
               <p className="text-[13px] font-sans text-muted-foreground/60 leading-[1.9] mb-6">
@@ -241,10 +234,10 @@ export default function About() {
         <div className="container">
           <Section className="text-center mb-20">
             <p className="text-[10px] tracking-luxury uppercase text-white/30 font-sans mb-4">
-              {isRTL ? "رحلتنا" : "Our Journey"}
+              {t.about.ourJourney}
             </p>
             <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl italic text-white leading-tight">
-              {isRTL ? "أربعة أركان تحكي قصتنا" : "Four Pillars of Our Story"}
+              {t.about.journeySubtitle}
             </h2>
             <div className="w-12 h-px bg-white/15 mx-auto mt-6" />
           </Section>
@@ -278,10 +271,10 @@ export default function About() {
         <div className="container">
           <Section className="text-center mb-16">
             <p className="text-[10px] tracking-luxury uppercase text-muted-foreground/40 font-sans mb-4">
-              {isRTL ? "قيمنا" : "Our Values"}
+              {t.about.ourValues}
             </p>
             <h2 className="font-heading text-3xl md:text-4xl italic text-foreground leading-tight">
-              {isRTL ? "ما نؤمن به" : "What We Stand For"}
+              {t.about.valuesSubtitle}
             </h2>
             <div className="w-10 h-px bg-foreground/10 mx-auto mt-6" />
           </Section>
@@ -311,10 +304,10 @@ export default function About() {
           <Section>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 text-center">
               {[
-                { num: 500, suffix: "+", label: isRTL ? "منتج فاخر" : "Luxury Products" },
-                { num: 13, suffix: "+", label: isRTL ? "ماركة عالمية" : "Global Brands" },
-                { num: 10, suffix: "K+", label: isRTL ? "عميل سعيد" : "Happy Clients" },
-                { num: 100, suffix: "%", label: isRTL ? "منتجات أصلية" : "Authentic Products" },
+                { num: 500, suffix: "+", label: t.home.luxuryProducts },
+                { num: 13, suffix: "+", label: t.home.globalBrands },
+                { num: 10, suffix: "K+", label: t.about.happyClients },
+                { num: 100, suffix: "%", label: t.about.authenticProducts },
               ].map((stat, i) => (
                 <div key={i} className="py-4">
                   <p className="font-heading text-3xl md:text-4xl italic text-foreground mb-2">
@@ -356,10 +349,10 @@ export default function About() {
         <div className="container">
           <Section className="text-center">
             <p className="text-[10px] tracking-luxury uppercase text-muted-foreground/40 font-sans mb-4">
-              {isRTL ? "ابدأ رحلتك" : "Begin Your Journey"}
+              {t.about.beginJourney}
             </p>
             <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl italic text-foreground leading-tight mb-6">
-              {isRTL ? "اكتشف مجموعتنا" : "Discover Our Collection"}
+              {t.about.discoverCollection}
             </h2>
             <div className="w-10 h-px bg-foreground/10 mx-auto mb-8" />
             <p className="text-[13px] font-sans text-muted-foreground/50 max-w-lg mx-auto leading-relaxed mb-10">
@@ -370,7 +363,7 @@ export default function About() {
             </p>
             <Link href="/products">
               <button className="group inline-flex items-center gap-3 px-10 py-4 bg-black text-white text-[11px] tracking-luxury uppercase font-sans hover:bg-foreground/85 transition-all duration-300">
-                {isRTL ? "تسوق الآن" : "Shop Now"}
+                {t.home.shopNow}
                 <Arrow size={14} strokeWidth={1.5} className="group-hover:translate-x-1 transition-transform duration-300" />
               </button>
             </Link>

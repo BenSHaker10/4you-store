@@ -84,8 +84,8 @@ export default function Home() {
   return (
     <div className="bg-white">
       <SEOHead
-        title={isRTL ? "متجر العطور والمكياج الفاخر" : "Premium Beauty Store"}
-        description={isRTL ? "متجر 4 YOU للعطور الفاخرة والمكياج والعناية بالبشرة من أرقى الماركات العالمية. شحن مجاني للطلبات فوق 250 ريال." : "4 YOU Store for luxury perfumes, makeup and skincare from the world's finest brands. Free shipping on orders over 250 SAR."}
+        title={t.home.seoTitle}
+        description={t.home.seoDesc}
         url="/"
       />
 
@@ -105,23 +105,17 @@ export default function Home() {
         <div className="relative z-10 text-center max-w-3xl mx-auto px-6">
           <div className="chanel-line mx-auto mb-8 bg-white/60" />
           <p className="text-white/60 text-[10px] tracking-luxury uppercase font-sans mb-6">
-            {isRTL ? "مجموعة حصرية ٢٠٢٦" : "Curated Collection 2026"}
+            {t.home.curatedCollection}
           </p>
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6 italic">
-            {isRTL ? (
-              <>الأناقة ليست خياراً،<span className="block mt-2">إنها أسلوب حياة.</span></>
-            ) : (
-              <>Elegance is not an option,<span className="block mt-2">it's a lifestyle.</span></>
-            )}
+            <>{t.home.heroTitle1}<span className="block mt-2">{t.home.heroTitle2}</span></>
           </h1>
           <p className="text-white/60 text-sm md:text-base font-sans font-light max-w-xl mx-auto mb-10 leading-relaxed">
-            {isRTL
-              ? "مجموعة منتقاة بعناية لمن يقدّرون الذوق الرفيع."
-              : "A curated collection designed for those who appreciate refined taste."}
+            {t.home.heroDesc}
           </p>
           <Link href="/products">
             <button className="group bg-white text-black px-10 py-4 text-[11px] tracking-luxury uppercase font-sans hover:bg-black hover:text-white transition-all duration-500 border border-white">
-              {isRTL ? "اكتشف المجموعة" : "Discover Collection"}
+              {t.home.discoverCollection}
               <ArrowIcon className="inline-block ml-3 w-3.5 h-3.5 transition-transform duration-500 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
             </button>
           </Link>
@@ -129,7 +123,7 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-          <span className="text-white/30 text-[9px] tracking-luxury uppercase">{isRTL ? "مرر للأسفل" : "Scroll"}</span>
+          <span className="text-white/30 text-[9px] tracking-luxury uppercase">{t.home.scroll}</span>
           <div className="w-px h-8 bg-white/15 animate-pulse" />
         </div>
       </section>
@@ -140,10 +134,10 @@ export default function Home() {
           <div className="container">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
               {[
-                { icon: Truck, title: isRTL ? "شحن سريع" : "Fast Shipping", desc: isRTL ? "توصيل مجاني سريع" : "Complimentary express delivery" },
-                { icon: Shield, title: isRTL ? "دفع آمن" : "Secure Payment", desc: isRTL ? "معاملات محمية" : "Protected transactions" },
-                { icon: Gift, title: isRTL ? "تغليف فاخر" : "Premium Quality", desc: isRTL ? "منتجات أصلية موثقة" : "Authenticated luxury products" },
-                { icon: RotateCcw, title: isRTL ? "إرجاع سهل" : "Easy Returns", desc: isRTL ? "خدمة عملاء مميزة" : "Dedicated concierge service" },
+                { icon: Truck, title: t.home.fastShipping, desc: t.home.fastShippingDesc },
+                { icon: Shield, title: t.home.securePayment, desc: t.home.securePaymentDesc },
+                { icon: Gift, title: t.home.premiumQuality, desc: t.home.premiumQualityDesc },
+                { icon: RotateCcw, title: t.home.easyReturns, desc: t.home.easyReturnsDesc },
               ].map((f, i) => (
                 <div key={i} className="flex items-center gap-3 group">
                   <f.icon className="w-4 h-4 text-foreground/40 group-hover:text-foreground transition-colors" strokeWidth={1.2} />
@@ -164,10 +158,10 @@ export default function Home() {
           <Section>
             <div className="text-center mb-16">
               <p className="text-[10px] tracking-luxury uppercase text-muted-foreground mb-4">
-                {isRTL ? "مجموعاتنا" : "Our Collections"}
+                {t.home.ourCollections}
               </p>
               <h2 className="font-heading text-3xl md:text-4xl text-foreground italic">
-                {isRTL ? "تصفح حسب الفئة" : "Explore by Category"}
+                {t.home.exploreByCategory}
               </h2>
               <div className="chanel-line mx-auto mt-6" />
             </div>
@@ -204,10 +198,10 @@ export default function Home() {
           <Section>
             <div className="text-center mb-16">
               <p className="text-[10px] tracking-luxury uppercase text-muted-foreground mb-4">
-                {isRTL ? "مختارة لك" : "Handpicked for You"}
+                {t.home.handpickedForYou}
               </p>
               <h2 className="font-heading text-3xl md:text-4xl text-foreground italic">
-                {isRTL ? "منتجات مميزة" : "Featured Products"}
+                {t.home.featuredProducts}
               </h2>
               <div className="chanel-line mx-auto mt-6" />
             </div>
@@ -235,7 +229,7 @@ export default function Home() {
           ) : (
             <div className="text-center py-20 text-muted-foreground">
               <Sparkles className="w-8 h-8 mx-auto mb-4 opacity-20" />
-              <p className="text-sm">{isRTL ? "قريباً" : "Coming Soon"}</p>
+              <p className="text-sm">{t.common.comingSoon}</p>
             </div>
           )}
 
@@ -243,7 +237,7 @@ export default function Home() {
             <div className="text-center mt-14">
               <Link href="/products">
                 <button className="group border border-foreground text-foreground px-10 py-3.5 text-[11px] tracking-luxury uppercase font-sans hover:bg-foreground hover:text-background transition-all duration-500">
-                  {isRTL ? "عرض جميع المنتجات" : "View All Products"}
+                  {t.home.viewAllProducts}
                   <ArrowIcon className="inline-block ml-3 w-3.5 h-3.5 transition-transform duration-500 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
                 </button>
               </Link>
@@ -258,24 +252,18 @@ export default function Home() {
           <Section>
             <div className="max-w-2xl mx-auto text-center">
               <p className="text-[10px] tracking-luxury uppercase text-white/40 mb-6">
-                {isRTL ? "إصدار محدود" : "Limited Edition"}
+                {t.home.limitedEdition}
               </p>
               <h2 className="font-heading text-3xl md:text-5xl italic leading-tight mb-6">
-                {isRTL ? (
-                  <>متوفر لفترة<span className="block">محدودة فقط.</span></>
-                ) : (
-                  <>Available for a short<span className="block">time only.</span></>
-                )}
+                <>{t.home.limitedTitle1}<span className="block">{t.home.limitedTitle2}</span></>
               </h2>
               <div className="w-12 h-px bg-white/20 mx-auto mb-6" />
               <p className="text-white/50 font-sans font-light text-sm md:text-base leading-relaxed mb-10 max-w-lg mx-auto">
-                {isRTL
-                  ? "اكتشف مجموعتنا الحصرية المحدودة، صُنعت لمن يبحثون عن التميز."
-                  : "Discover our exclusive limited-edition collection, crafted for those who seek the extraordinary."}
+                {t.home.limitedDesc}
               </p>
               <Link href="/products">
                 <button className="group bg-white text-black px-10 py-4 text-[11px] tracking-luxury uppercase font-sans hover:bg-white/90 transition-all duration-500">
-                  {isRTL ? "تسوق الآن" : "Shop Now"}
+                  {t.home.shopNow}
                   <ArrowIcon className="inline-block ml-3 w-3.5 h-3.5 transition-transform duration-500 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
                 </button>
               </Link>
@@ -290,10 +278,10 @@ export default function Home() {
           <Section>
             <div className="text-center mb-16">
               <p className="text-[10px] tracking-luxury uppercase text-muted-foreground mb-4">
-                {isRTL ? "آراء العملاء" : "What They Say"}
+                {t.home.whatTheySay}
               </p>
               <h2 className="font-heading text-3xl md:text-4xl text-foreground italic">
-                {isRTL ? "شهادات العملاء" : "Client Testimonials"}
+                {t.home.clientTestimonials}
               </h2>
               <div className="chanel-line mx-auto mt-6" />
             </div>
@@ -326,10 +314,10 @@ export default function Home() {
           <div className="container">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
               {[
-                { value: "500+", label: isRTL ? "منتج فاخر" : "Luxury Products", icon: Crown },
-                { value: "13+", label: isRTL ? "ماركة عالمية" : "Global Brands", icon: Award },
-                { value: "10K+", label: isRTL ? "عميل سعيد" : "Happy Customers", icon: Heart },
-                { value: "100%", label: isRTL ? "منتجات أصلية" : "Authentic", icon: Shield },
+                { value: "500+", label: t.home.luxuryProducts, icon: Crown },
+                { value: "13+", label: t.home.globalBrands, icon: Award },
+                { value: "10K+", label: t.home.happyCustomers, icon: Heart },
+                { value: "100%", label: t.home.authentic, icon: Shield },
               ].map((stat, i) => (
                 <div key={i} className="group">
                   <stat.icon className="w-4 h-4 text-muted-foreground mx-auto mb-3" strokeWidth={1.2} />
@@ -349,10 +337,10 @@ export default function Home() {
             <div className="max-w-lg mx-auto text-center">
               <Diamond className="w-4 h-4 text-white/30 mx-auto mb-6" strokeWidth={1.2} />
               <p className="text-[10px] tracking-luxury uppercase text-white/40 mb-4">
-                {isRTL ? "ابقَ على اتصال" : "Stay Connected"}
+                {t.home.stayConnected}
               </p>
               <h2 className="font-heading text-2xl md:text-3xl text-white italic mb-4">
-                {isRTL ? "انضم إلى عالمنا" : "Join Our World"}
+                {t.home.joinOurWorld}
               </h2>
               <div className="w-12 h-px bg-white/15 mx-auto mb-6" />
               <p className="text-white/40 text-sm font-sans font-light mb-8">
@@ -363,15 +351,15 @@ export default function Home() {
               <div className="flex gap-0 max-w-md mx-auto">
                 <input
                   type="email"
-                  placeholder={isRTL ? "بريدك الإلكتروني" : "Your email address"}
+                  placeholder={t.home.yourEmail}
                   className="flex-1 bg-white/5 border border-white/10 px-5 py-3.5 text-sm font-sans text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
                 />
                 <button className="bg-white text-black px-6 py-3.5 text-[10px] tracking-luxury uppercase font-sans hover:bg-white/90 transition-colors whitespace-nowrap">
-                  {isRTL ? "اشترك" : "Subscribe"}
+                  {t.home.subscribe}
                 </button>
               </div>
               <p className="text-white/15 text-[9px] mt-5 tracking-wide">
-                {isRTL ? "احصل على خصم 15% على أول طلب عند الاشتراك" : "Get 15% off your first order when you subscribe"}
+                {t.home.subscribeOffer}
               </p>
             </div>
           </Section>

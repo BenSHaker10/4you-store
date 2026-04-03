@@ -127,7 +127,7 @@ export default function ProductDetail() {
       await addToCart(product.id, quantity, selectedOption ?? undefined);
       toast.success(t.product.addedToCart, { description: `${product.name} x${quantity}`, duration: 2500 });
     } catch {
-      toast.error(isRTL ? "فشل في الإضافة للسلة" : "Failed to add to bag");
+      toast.error(t.common.failed);
     } finally {
       setAdding(false);
     }
@@ -145,7 +145,7 @@ export default function ProductDetail() {
   const handleShare = async () => {
     const shareData = {
       title: product?.name || "4 YOU",
-      text: product?.description || (isRTL ? "شاهد هذا المنتج من 4 YOU" : "Check out this product from 4 YOU"),
+      text: product?.description || (t.productDetail.shareProduct),
       url: window.location.href,
     };
     try {
@@ -153,15 +153,15 @@ export default function ProductDetail() {
         await navigator.share(shareData);
       } else {
         await navigator.clipboard.writeText(window.location.href);
-        toast.success(isRTL ? "تم نسخ الرابط" : "Link copied");
+        toast.success(t.productDetail.linkCopied);
       }
     } catch (err: any) {
       if (err?.name !== "AbortError") {
         try {
           await navigator.clipboard.writeText(window.location.href);
-          toast.success(isRTL ? "تم نسخ الرابط" : "Link copied");
+          toast.success(t.productDetail.linkCopied);
         } catch {
-          toast.error(isRTL ? "فشل في النسخ" : "Failed to copy");
+          toast.error(t.common.failed);
         }
       }
     }
@@ -319,7 +319,7 @@ export default function ProductDetail() {
                       {parseFloat(product.compareAtPrice!).toFixed(2)}
                     </span>
                     <span className="text-[9px] font-sans tracking-wider uppercase text-black/50 border border-black/10 px-2 py-0.5">
-                      {isRTL ? `وفر ${discountPercent}%` : `Save ${discountPercent}%`}
+                      {`${discountPercent}% OFF`}
                     </span>
                   </>
                 )}
@@ -392,7 +392,7 @@ export default function ProductDetail() {
                 {adding ? t.common.loading : t.productDetail.addToCart}
               </Button>
               <button
-                onClick={() => { setLiked(!liked); toast.success(liked ? (isRTL ? "تمت الإزالة من المفضلة" : "Removed from wishlist") : (isRTL ? "تمت الإضافة للمفضلة" : "Saved to wishlist")); }}
+                onClick={() => { setLiked(!liked); toast.success(liked ? t.productDetail.removedFromWishlist : t.productDetail.addedToWishlist); }}
                 className={`w-12 h-12 border flex items-center justify-center transition-all duration-300 ${
                   liked ? "border-black bg-black text-white" : "border-black/10 hover:border-black/30 text-black/30"
                 }`}
@@ -428,7 +428,7 @@ export default function ProductDetail() {
           <div className="mt-24 pt-16 border-t border-black/[0.06]">
             <div className="text-center mb-12">
               <p className="text-[9px] font-sans tracking-luxury uppercase text-black/25 mb-3">
-                {isRTL ? "قد يعجبك أيضاً" : "You May Also Like"}
+                {t.productDetail.youMayAlsoLike}
               </p>
               <h2 className="font-heading text-2xl md:text-3xl italic">
                 {t.productDetail.relatedProducts}

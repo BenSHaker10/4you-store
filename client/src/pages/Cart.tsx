@@ -26,7 +26,7 @@ export default function Cart() {
           <ShoppingBag className="w-10 h-10 text-black/10 mx-auto mb-6" strokeWidth={1} />
           <h2 className="font-heading text-2xl md:text-3xl italic mb-4">{t.cart.title}</h2>
           <p className="text-[13px] font-sans text-black/30 mb-8">
-            {isRTL ? "سجل دخولك لعرض سلتك وبدء التسوق" : "Sign in to view your bag and start shopping"}
+            {t.cart.loginToView}
           </p>
           <Button onClick={() => { window.location.href = getLoginUrl(); }} className="rounded-none font-sans text-[10px] tracking-luxury uppercase px-10 h-12 bg-black hover:bg-black/90 text-white">
             {t.auth.signIn}
@@ -69,7 +69,7 @@ export default function Cart() {
   const shipping = subtotal >= 250 ? 0 : 15;
   const total = subtotal + shipping;
   const freeShippingProgress = Math.min((subtotal / 250) * 100, 100);
-  const formatPrice = (amount: number) => `${amount.toFixed(2)} ${isRTL ? "ريال" : "SAR"}`;
+  const formatPrice = (amount: number) => `${amount.toFixed(2)} ${t.product.sar}`;
 
   if (items.length === 0) {
     return (
@@ -108,7 +108,7 @@ export default function Cart() {
 
   return (
     <div className="min-h-screen bg-white">
-      <SEOHead title={isRTL ? "سلة التسوق" : "Shopping Cart"} url="/cart" noindex />
+      <SEOHead title={t.cart.title} url="/cart" noindex />
       {/* Breadcrumb */}
       <div className="border-b border-black/[0.04]">
         <div className="container py-4">
@@ -129,9 +129,9 @@ export default function Cart() {
           </h1>
           <button
             className="text-[10px] font-sans tracking-luxury uppercase text-black/30 hover:text-black transition-colors"
-            onClick={() => { clearCart(); toast.success(isRTL ? "تم مسح السلة" : "Bag cleared"); }}
+            onClick={() => { clearCart(); toast.success(t.cart.bagCleared); }}
           >
-            {isRTL ? "مسح الكل" : "Clear All"}
+            {t.cart.clearAll}
           </button>
         </div>
 
@@ -168,7 +168,7 @@ export default function Cart() {
                         </div>
                         <button
                           className="p-2 text-black/15 hover:text-black transition-colors shrink-0"
-                          onClick={() => { removeItem(item.id); toast.success(isRTL ? "تمت الإزالة" : "Removed"); }}
+                          onClick={() => { removeItem(item.id); toast.success(t.cart.removed); }}
                         >
                           <Trash2 className="w-3.5 h-3.5" strokeWidth={1.5} />
                         </button>
@@ -209,7 +209,7 @@ export default function Cart() {
                     <div>
                       <div className="flex items-center gap-1.5 text-[10px] font-sans text-black/40 mb-2">
                         <Truck className="w-3 h-3" strokeWidth={1.5} />
-                        {isRTL ? `أضف ${(250 - subtotal).toFixed(0)} ريال للشحن المجاني` : `Add ${(250 - subtotal).toFixed(0)} SAR for free shipping`}
+                        {`${t.cart.freeShippingOver} - ${(250 - subtotal).toFixed(0)} ${t.product.sar}`}
                       </div>
                       <div className="h-px bg-[#f0f0f0] overflow-hidden">
                         <div className="h-full bg-black transition-all duration-500" style={{ width: `${freeShippingProgress}%` }} />
@@ -218,7 +218,7 @@ export default function Cart() {
                   ) : (
                     <div className="flex items-center gap-2 text-[10px] font-sans text-black/50">
                       <Truck className="w-3 h-3" strokeWidth={1.5} />
-                      {isRTL ? "شحن مجاني" : "Complimentary shipping"}
+                      {t.cart.freeShippingOver}
                     </div>
                   )}
                 </div>
@@ -248,9 +248,9 @@ export default function Cart() {
 
                 <div className="mt-6 space-y-3">
                   {[
-                    { icon: Truck, text: isRTL ? "شحن مجاني فوق 250 ريال" : "Free shipping over 250 SAR" },
-                    { icon: RotateCcw, text: isRTL ? "إرجاع مجاني خلال 14 يوم" : "14-day free returns" },
-                    { icon: Shield, text: isRTL ? "دفع آمن ومشفر" : "Secure encrypted payment" },
+                    { icon: Truck, text: t.cart.freeShippingOver },
+                    { icon: RotateCcw, text: t.cart.easyReturns },
+                    { icon: Shield, text: t.cart.secureCheckout },
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-2.5 text-[10px] font-sans text-black/25">
                       <item.icon className="w-3 h-3 shrink-0" strokeWidth={1.5} />

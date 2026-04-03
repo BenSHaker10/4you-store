@@ -87,7 +87,7 @@ export default function Orders() {
           <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>{t.orders.title}</h1>
           {orders && orders.length > 0 && (
             <span className="text-sm text-muted-foreground">
-              {orders.length} {isRTL ? "طلب" : orders.length === 1 ? "order" : "orders"}
+              {orders.length} {t.orders.title}
             </span>
           )}
         </div>

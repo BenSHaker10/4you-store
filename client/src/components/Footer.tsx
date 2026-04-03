@@ -27,7 +27,7 @@ export default function Footer() {
               <span className="font-light">4</span>You
             </h3>
             <p className="text-[10px] tracking-luxury uppercase text-white/25 font-sans mb-6">
-              {isRTL ? "الأناقة بين يديك" : "Elegance Redefined"}
+              {t.footer.description}
             </p>
             <p className="text-[12px] font-sans text-white/30 leading-relaxed max-w-xs mb-6">
               {t.footer.description}
@@ -119,7 +119,7 @@ export default function Footer() {
               <li><span className="text-[12px] font-sans text-white/40 hover:text-white transition-colors duration-300 cursor-pointer">{t.footer.shippingPolicy}</span></li>
               <li><span className="text-[12px] font-sans text-white/40 hover:text-white transition-colors duration-300 cursor-pointer">{t.footer.returnPolicy}</span></li>
               <li><Link href="/orders" className="text-[12px] font-sans text-white/40 hover:text-white transition-colors duration-300">{isRTL ? "تتبع الطلب" : "Track Order"}</Link></li>
-              <li><Link href="/about" className="text-[12px] font-sans text-white/40 hover:text-white transition-colors duration-300">{isRTL ? "من نحن" : "About Us"}</Link></li>
+              <li><Link href="/about" className="text-[12px] font-sans text-white/40 hover:text-white transition-colors duration-300">{t.about.title}</Link></li>
               {/* Phone numbers */}
               {phone1 && (
                 <li>
@@ -142,9 +142,9 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div className="col-span-2 md:col-span-3">
-            <h4 className="text-[9px] font-sans tracking-luxury uppercase text-white/25 mb-8">{isRTL ? "ابقَ على اتصال" : "Stay Connected"}</h4>
+            <h4 className="text-[9px] font-sans tracking-luxury uppercase text-white/25 mb-8">{t.home.stayConnected}</h4>
             <p className="text-[12px] font-sans text-white/30 mb-5 leading-relaxed">
-              {isRTL ? "احصل على خصم 15% على أول طلب" : "Get 15% off your first order"}
+              {t.home.subscribeOffer}
             </p>
             <div className="flex">
               <input

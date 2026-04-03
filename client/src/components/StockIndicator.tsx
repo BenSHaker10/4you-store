@@ -15,7 +15,7 @@ export default function StockIndicator({ stock, className = "" }: StockIndicator
         <div className="flex items-center gap-1.5">
           <XIcon className="w-3 h-3 text-red-400" strokeWidth={2} />
           <span className="text-[11px] font-sans text-red-500 font-medium">
-            {isRTL ? "نفذت الكمية" : "Out of Stock"}
+            {t.stock.outOfStock}
           </span>
         </div>
       </div>
@@ -28,7 +28,7 @@ export default function StockIndicator({ stock, className = "" }: StockIndicator
         <div className="flex items-center gap-1.5">
           <AlertTriangle className="w-3 h-3 text-amber-500" strokeWidth={2} />
           <span className="text-[11px] font-sans text-amber-600 font-medium">
-            {isRTL ? `باقي ${stock} فقط! اطلب الآن` : `Only ${stock} left! Order now`}
+            {`${t.stock.onlyLeft} ${stock} ${t.stock.left}`}
           </span>
         </div>
         {/* Urgency bar */}
@@ -48,7 +48,7 @@ export default function StockIndicator({ stock, className = "" }: StockIndicator
         <div className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 bg-amber-400 rounded-full" />
           <span className="text-[11px] font-sans text-black/50">
-            {isRTL ? `${stock} متوفر - كمية محدودة` : `${stock} available - Limited stock`}
+            {`${stock} ${t.stock.inStock} - ${t.stock.lowStock}`}
           </span>
         </div>
       </div>
@@ -60,7 +60,7 @@ export default function StockIndicator({ stock, className = "" }: StockIndicator
       <div className="flex items-center gap-1.5">
         <Check className="w-3 h-3 text-green-500" strokeWidth={2} />
         <span className="text-[11px] font-sans text-black/50">
-          {isRTL ? "متوفر في المخزون" : "In Stock"}
+          {t.stock.inStock}
         </span>
       </div>
     </div>

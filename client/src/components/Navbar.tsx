@@ -244,7 +244,7 @@ export default function Navbar() {
                       className="text-[11px] font-sans font-medium text-black hover:opacity-60 transition-opacity inline-block mt-2 border-b border-black/20 pb-0.5"
                       onClick={() => setActiveDept(null)}
                     >
-                      {t.common.viewAll} {isRTL ? "←" : "→"}
+                      {t.common.viewAll} →
                     </Link>
                   </li>
                 </ul>
@@ -256,12 +256,12 @@ export default function Navbar() {
                 <ul className="space-y-3">
                   <li>
                     <Link href={`/products?department=${activeDept}&featured=true`} className="text-[12px] font-sans text-black/50 hover:text-black transition-colors" onClick={() => setActiveDept(null)}>
-                      {isRTL ? "الأكثر مبيعاً" : "Best Sellers"}
+                      {t.nav.allProducts}
                     </Link>
                   </li>
                   <li>
                     <Link href={`/products?department=${activeDept}`} className="text-[12px] font-sans text-black/50 hover:text-black transition-colors" onClick={() => setActiveDept(null)}>
-                      {isRTL ? "وصل حديثاً" : "New Arrivals"}
+                      {t.nav.allProducts}
                     </Link>
                   </li>
                 </ul>
@@ -290,10 +290,10 @@ export default function Navbar() {
                 <div>
                   <p className="text-white/30 text-[9px] tracking-luxury uppercase font-sans mb-2">{isRTL ? "حصري" : "Exclusive"}</p>
                   <p className="text-white font-heading text-xl italic">
-                    {isRTL ? "مجموعة مميزة" : "Featured Collection"}
+                    {t.featured.title}
                   </p>
                   <span className="inline-block mt-3 text-[10px] font-sans tracking-luxury uppercase text-white/50 border-b border-white/20 pb-0.5 group-hover:text-white group-hover:border-white transition-all">
-                    {isRTL ? "تسوق الآن" : "Shop Now"}
+                    {t.home.shopNow}
                   </span>
                 </div>
               </div>
@@ -356,7 +356,7 @@ export default function Navbar() {
                       className="block py-2 text-[11px] font-sans font-medium text-black"
                       onClick={() => { setMobileMenuOpen(false); setActiveDept(null); }}
                     >
-                      {t.common.viewAll} {isRTL ? "←" : "→"}
+                      {t.common.viewAll} →
                     </Link>
                   </div>
                 )}
@@ -367,7 +367,7 @@ export default function Navbar() {
               className="block py-3.5 text-[11px] tracking-luxury uppercase font-sans border-b border-black/[0.04] hover:text-black/60 transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              {isRTL ? "جميع المنتجات" : "All Products"}
+              {t.products.allProducts}
             </Link>
           </nav>
         </div>

@@ -28,36 +28,36 @@ export default function Register() {
         );
         navigate("/verify-email");
       } else {
-        toast.success(isRTL ? "تم إنشاء الحساب بنجاح!" : "Account created successfully!");
+        toast.success(t.common.success);
         window.location.href = "/";
       }
     },
     onError: (err) => {
-      toast.error(err.message || (isRTL ? "فشل في إنشاء الحساب" : "Registration failed"));
+      toast.error(err.message || (t.common.failed));
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !password || !confirmPassword) {
-      toast.error(isRTL ? "يرجى ملء جميع الحقول" : "Please fill in all fields");
+      toast.error(t.common.required);
       return;
     }
     if (password !== confirmPassword) {
-      toast.error(isRTL ? "كلمات المرور غير متطابقة" : "Passwords do not match");
+      toast.error(t.account.passwordsDoNotMatch);
       return;
     }
     if (password.length < 8) {
-      toast.error(isRTL ? "كلمة المرور يجب أن تكون 8 أحرف على الأقل" : "Password must be at least 8 characters");
+      toast.error(t.account.passwordTooShort);
       return;
     }
     registerMutation.mutate({ name, email, password, origin: window.location.origin });
   };
 
   const passwordChecks = [
-    { label: isRTL ? "8 أحرف على الأقل" : "At least 8 characters", valid: password.length >= 8 },
-    { label: isRTL ? "يحتوي رقم" : "Contains a number", valid: /\d/.test(password) },
-    { label: isRTL ? "حرف كبير" : "Contains uppercase letter", valid: /[A-Z]/.test(password) },
+    { label: t.account.passwordTooShort, valid: password.length >= 8 },
+    { label: t.common.required, valid: /\d/.test(password) },
+    { label: t.common.required, valid: /[A-Z]/.test(password) },
   ];
 
   const benefits = isRTL
@@ -80,17 +80,10 @@ export default function Register() {
             <h1 className="text-4xl font-serif font-bold tracking-wide">4 YOU</h1>
           </div>
           <h2 className="text-3xl font-serif mb-4 leading-tight">
-            {isRTL ? (
-              <>انضم إلى عالم<br /><span className="text-amber-400 italic">الجمال الفاخر</span></>
-            ) : (
-              <>Join the World of<br /><span className="text-amber-400 italic">Premium Beauty</span></>
-            )}
+            <>{t.auth.registerTitle1}<br /><span className="text-amber-400 italic">{t.auth.registerTitle2}</span></>
           </h2>
           <p className="text-white/70 text-lg leading-relaxed max-w-md">
-            {isRTL
-              ? "أنشئ حسابك للوصول إلى مجموعات حصرية، تتبع طلباتك، واستمتع بتوصيات جمال مخصصة."
-              : "Create your account to access exclusive collections, track orders, and enjoy personalized beauty recommendations."
-            }
+            {t.auth.registerDesc}
           </p>
           <div className="mt-10 space-y-4">
             {benefits.map((item, i) => (
@@ -126,7 +119,7 @@ export default function Register() {
                 <Input
                   id="name"
                   type="text"
-                  placeholder={isRTL ? "اسمك الكامل" : "Your full name"}
+                  placeholder={t.auth.namePlaceholder}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className={`${isRTL ? "pr-11" : "pl-11"} h-12 border-border/50 focus:border-gold focus:ring-gold/20 rounded-xl bg-background`}
@@ -142,7 +135,7 @@ export default function Register() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder={isRTL ? "بريدك@email.com" : "your@email.com"}
+                  placeholder={t.auth.emailPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={`${isRTL ? "pr-11" : "pl-11"} h-12 border-border/50 focus:border-gold focus:ring-gold/20 rounded-xl bg-background`}
@@ -158,7 +151,7 @@ export default function Register() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder={isRTL ? "أنشئ كلمة مرور قوية" : "Create a strong password"}
+                  placeholder={t.auth.passwordPlaceholder}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className={`${isRTL ? "pr-11 pl-11" : "pl-11 pr-11"} h-12 border-border/50 focus:border-gold focus:ring-gold/20 rounded-xl bg-background`}
@@ -191,7 +184,7 @@ export default function Register() {
                 <Input
                   id="confirmPassword"
                   type="password"
-                  placeholder={isRTL ? "أعد كتابة كلمة المرور" : "Confirm your password"}
+                  placeholder={t.auth.passwordPlaceholder}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className={`${isRTL ? "pr-11" : "pl-11"} h-12 border-border/50 focus:border-gold focus:ring-gold/20 rounded-xl bg-background`}
@@ -199,7 +192,7 @@ export default function Register() {
                 />
               </div>
               {confirmPassword && password !== confirmPassword && (
-                <p className="text-xs text-red-500 mt-1">{isRTL ? "كلمات المرور غير متطابقة" : "Passwords do not match"}</p>
+                <p className="text-xs text-red-500 mt-1">{t.account.passwordsDoNotMatch}</p>
               )}
             </div>
 
@@ -211,7 +204,7 @@ export default function Register() {
               {registerMutation.isPending ? (
                 <span className="flex items-center gap-2">
                   <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  {isRTL ? "جاري إنشاء الحساب..." : "Creating account..."}
+                  {t.auth.creating}
                 </span>
               ) : t.auth.registerTitle}
             </Button>

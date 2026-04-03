@@ -18,14 +18,14 @@ export default function ForgotPassword() {
       setSent(true);
     },
     onError: (err) => {
-      toast.error(err.message || (isRTL ? "حدث خطأ، حاول مرة أخرى" : "An error occurred, please try again"));
+      toast.error(err.message || (t.common.error));
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
-      toast.error(isRTL ? "يرجى إدخال بريدك الإلكتروني" : "Please enter your email");
+      toast.error(t.common.required);
       return;
     }
     forgotMutation.mutate({ email, origin: window.location.origin });
@@ -65,7 +65,7 @@ export default function ForgotPassword() {
             <>
               <div className="mb-10">
                 <h2 className="font-heading text-2xl italic mb-2">
-                  {isRTL ? "نسيت كلمة المرور؟" : "Forgot Password?"}
+                  {t.auth.forgotPassword}
                 </h2>
                 <p className="text-[13px] font-sans text-black/30 leading-relaxed">
                   {isRTL
@@ -78,14 +78,14 @@ export default function ForgotPassword() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <Label htmlFor="email" className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-2 block">
-                    {isRTL ? "البريد الإلكتروني" : "Email Address"}
+                    {t.account.email}
                   </Label>
                   <div className="relative">
                     <Mail className={`absolute ${isRTL ? "right-3.5" : "left-3.5"} top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-black/15`} strokeWidth={1.5} />
                     <Input
                       id="email"
                       type="email"
-                      placeholder={isRTL ? "بريدك@email.com" : "your@email.com"}
+                      placeholder={t.auth.emailPlaceholder}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className={`${isRTL ? "pr-10" : "pl-10"} h-11 rounded-none border-black/[0.08] text-[13px] font-sans focus:border-black/20 transition-all placeholder:text-black/15`}
@@ -102,11 +102,11 @@ export default function ForgotPassword() {
                   {forgotMutation.isPending ? (
                     <span className="flex items-center gap-2">
                       <span className="w-3 h-3 border border-white/30 border-t-white animate-spin" />
-                      {isRTL ? "جاري الإرسال..." : "Sending..."}
+                      {t.auth.sending}
                     </span>
                   ) : (
                     <span className="flex items-center gap-2">
-                      {isRTL ? "إرسال رابط الاستعادة" : "Send Reset Link"}
+                      {t.auth.sendResetLink}
                       <ArrowRight className="w-3.5 h-3.5" strokeWidth={1.5} />
                     </span>
                   )}
@@ -115,7 +115,7 @@ export default function ForgotPassword() {
 
               <div className="mt-6 text-center">
                 <Link href="/login" className="text-[12px] font-sans text-black/30 hover:text-black/60 transition-colors underline underline-offset-4 decoration-black/10">
-                  {isRTL ? "العودة لتسجيل الدخول" : "Back to Login"}
+                  {t.auth.backToLogin}
                 </Link>
               </div>
             </>
@@ -125,7 +125,7 @@ export default function ForgotPassword() {
                 <CheckCircle className="w-6 h-6 text-black/60" strokeWidth={1.5} />
               </div>
               <h2 className="font-heading text-2xl italic mb-3">
-                {isRTL ? "تم الإرسال" : "Email Sent"}
+                {t.auth.resetLinkSent}
               </h2>
               <p className="text-[13px] font-sans text-black/30 leading-relaxed mb-8 max-w-xs mx-auto">
                 {isRTL
@@ -139,14 +139,14 @@ export default function ForgotPassword() {
                   variant="outline"
                   className="w-full h-11 rounded-none font-sans text-[10px] tracking-luxury uppercase border-black/[0.08] hover:bg-black/[0.02] transition-all"
                 >
-                  {isRTL ? "إرسال مرة أخرى" : "Send Again"}
+                  {t.auth.sendResetLink}
                 </Button>
                 <Link href="/login">
                   <Button
                     variant="ghost"
                     className="w-full h-11 rounded-none font-sans text-[10px] tracking-luxury uppercase text-black/40 hover:text-black/60 transition-all"
                   >
-                    {isRTL ? "العودة لتسجيل الدخول" : "Back to Login"}
+                    {t.auth.backToLogin}
                   </Button>
                 </Link>
               </div>

@@ -90,20 +90,20 @@ export default function Products() {
   const hasActiveFilters = search || department !== "all" || selectedCategory !== "all" || selectedBrand !== "all" || priceRange[0] > 0 || priceRange[1] < 500;
 
   const pageTitle = featured
-    ? (isRTL ? "عروض وتخفيضات" : "Sale & Offers")
+    ? (t.nav.sale)
     : department !== "all"
       ? (isRTL
           ? `${DEPARTMENTS.find(d => d.value === department)?.label || ""}`
           : `${department.charAt(0).toUpperCase() + department.slice(1)}'s Collection`)
       : selectedCategory !== "all"
-        ? (categoriesData?.find(c => c.slug === selectedCategory)?.name || (isRTL ? "المنتجات" : "Products"))
-        : (isRTL ? "جميع المنتجات" : "All Products");
+        ? (categoriesData?.find(c => c.slug === selectedCategory)?.name || (t.products.allProducts))
+        : (t.products.allProducts);
 
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title={isRTL ? "تسوق المنتجات" : "Shop Products"}
-        description={isRTL ? "تصفح مجموعتنا المميزة من العطور والمكياج ومستحضرات العناية بالبشرة" : "Browse our curated collection of perfumes, makeup and skincare products"}
+        title={t.products.title}
+        description={t.about.description}
         url="/products"
       />
       {/* Page Header */}
@@ -118,7 +118,7 @@ export default function Products() {
             {pageTitle}
           </h1>
           <p className="text-[12px] font-sans text-black/30 mt-3">
-            {data ? `${data.total} ${isRTL ? "منتج" : "products"}` : t.common.loading}
+            {data ? `${data.total} ${t.products.productsCount}` : t.common.loading}
           </p>
         </div>
       </div>
@@ -207,7 +207,7 @@ export default function Products() {
               <h3 className="text-[9px] font-sans tracking-luxury uppercase text-black/30">{t.common.filter}</h3>
               {hasActiveFilters && (
                 <button onClick={clearFilters} className="text-[10px] font-sans text-black/40 hover:text-black flex items-center gap-1.5 transition-colors">
-                  <X className="w-3 h-3" /> {isRTL ? "مسح الكل" : "Clear All"}
+                  <X className="w-3 h-3" /> {t.cart.clearAll}
                 </button>
               )}
             </div>
@@ -216,7 +216,7 @@ export default function Products() {
                 <label className="text-[9px] font-sans tracking-luxury uppercase text-black/25 mb-2.5 block">{isRTL ? "الفئة" : "Category"}</label>
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                   <SelectTrigger className="text-[11px] font-sans h-10 border-black/[0.06] rounded-none">
-                    <SelectValue placeholder={isRTL ? "جميع الفئات" : "All Categories"} />
+                    <SelectValue placeholder={t.products.filterByCategory} />
                   </SelectTrigger>
                   <SelectContent className="border-black/[0.06] rounded-none">
                     <SelectItem value="all" className="text-[11px] font-sans">{isRTL ? "جميع الفئات" : "All Categories"}</SelectItem>
@@ -230,7 +230,7 @@ export default function Products() {
                 <label className="text-[9px] font-sans tracking-luxury uppercase text-black/25 mb-2.5 block">{isRTL ? "الماركة" : "Brand"}</label>
                 <Select value={selectedBrand} onValueChange={setSelectedBrand}>
                   <SelectTrigger className="text-[11px] font-sans h-10 border-black/[0.06] rounded-none">
-                    <SelectValue placeholder={isRTL ? "جميع الماركات" : "All Brands"} />
+                    <SelectValue placeholder={t.products.filterByBrand} />
                   </SelectTrigger>
                   <SelectContent className="border-black/[0.06] rounded-none">
                     <SelectItem value="all" className="text-[11px] font-sans">{isRTL ? "جميع الماركات" : "All Brands"}</SelectItem>
@@ -242,7 +242,7 @@ export default function Products() {
               </div>
               <div className="sm:col-span-2">
                 <label className="text-[9px] font-sans tracking-luxury uppercase text-black/25 mb-2.5 block">
-                  {isRTL ? `نطاق السعر: ${priceRange[0]} - ${priceRange[1]} ريال` : `Price: ${priceRange[0]} - ${priceRange[1]} SAR`}
+                  {`${t.products.filterByPrice}: ${priceRange[0]} - ${priceRange[1]} ${t.product.sar}`}
                 </label>
                 <Slider
                   value={priceRange}
@@ -349,12 +349,12 @@ export default function Products() {
             <Package className="w-8 h-8 text-black/10 mx-auto mb-6" strokeWidth={1} />
             <h3 className="font-heading text-xl italic mb-3">{t.common.noResults}</h3>
             <p className="text-[12px] font-sans text-black/30 mb-8 max-w-sm mx-auto">
-              {isRTL ? "حاول تعديل البحث أو الفلاتر للعثور على ما تبحث عنه" : "Try adjusting your search or filters"}
+              {t.products.noProductsDesc}
             </p>
             {hasActiveFilters && (
               <button onClick={clearFilters} className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white text-[10px] font-sans tracking-luxury uppercase hover:bg-black/90 transition-all duration-300">
                 <X className="w-3 h-3" />
-                {isRTL ? "مسح جميع الفلاتر" : "Clear All Filters"}
+                {t.products.clearFilters}
               </button>
             )}
           </div>

@@ -12,28 +12,28 @@ export default function TrustBadges({ variant = "horizontal", className = "" }: 
   const badges = [
     {
       icon: Truck,
-      title: isRTL ? "شحن مجاني" : "Free Shipping",
-      desc: isRTL ? "للطلبات فوق 250 ريال" : "Orders over 250 SAR",
+      title: t.trust.freeShipping,
+      desc: t.trust.freeShippingDesc,
     },
     {
       icon: Shield,
-      title: isRTL ? "منتجات أصلية 100%" : "100% Authentic",
-      desc: isRTL ? "ضمان الأصالة" : "Guaranteed genuine",
+      title: t.trust.authentic,
+      desc: t.trust.authenticDesc,
     },
     {
       icon: RotateCcw,
-      title: isRTL ? "إرجاع مجاني" : "Free Returns",
-      desc: isRTL ? "خلال 14 يوم" : "Within 14 days",
+      title: t.trust.freeReturn,
+      desc: t.trust.freeReturnDesc,
     },
     {
       icon: CreditCard,
-      title: isRTL ? "دفع آمن" : "Secure Payment",
-      desc: isRTL ? "معاملات مشفرة" : "Encrypted transactions",
+      title: t.home.securePayment,
+      desc: t.trust.securePaymentDesc,
     },
     {
       icon: Award,
-      title: isRTL ? "جودة مضمونة" : "Quality Guaranteed",
-      desc: isRTL ? "أرقى الماركات العالمية" : "World-class brands",
+      title: t.trust.authentic,
+      desc: t.trust.authenticDesc,
     },
   ];
 

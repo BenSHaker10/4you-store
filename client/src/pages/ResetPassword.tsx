@@ -24,25 +24,25 @@ export default function ResetPassword() {
   const resetMutation = trpc.auth.resetPassword.useMutation({
     onSuccess: () => {
       setSuccess(true);
-      toast.success(isRTL ? "تم تغيير كلمة المرور بنجاح" : "Password changed successfully");
+      toast.success(t.auth.passwordResetSuccess);
     },
     onError: (err) => {
-      toast.error(err.message || (isRTL ? "رابط غير صالح أو منتهي الصلاحية" : "Invalid or expired reset link"));
+      toast.error(err.message || (t.common.error));
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!password || !confirmPassword) {
-      toast.error(isRTL ? "يرجى ملء جميع الحقول" : "Please fill in all fields");
+      toast.error(t.common.required);
       return;
     }
     if (password.length < 8) {
-      toast.error(isRTL ? "كلمة المرور يجب أن تكون 8 أحرف على الأقل" : "Password must be at least 8 characters");
+      toast.error(t.account.passwordTooShort);
       return;
     }
     if (password !== confirmPassword) {
-      toast.error(isRTL ? "كلمتا المرور غير متطابقتين" : "Passwords do not match");
+      toast.error(t.account.passwordsDoNotMatch);
       return;
     }
     resetMutation.mutate({ token, newPassword: password });
@@ -56,7 +56,7 @@ export default function ResetPassword() {
             <AlertCircle className="w-6 h-6 text-black/40" strokeWidth={1.5} />
           </div>
           <h2 className="font-heading text-2xl italic mb-3">
-            {isRTL ? "رابط غير صالح" : "Invalid Link"}
+            {t.common.error}
           </h2>
           <p className="text-[13px] font-sans text-black/30 leading-relaxed mb-8">
             {isRTL
@@ -66,7 +66,7 @@ export default function ResetPassword() {
           </p>
           <Link href="/forgot-password">
             <Button className="h-11 rounded-none font-sans text-[10px] tracking-luxury uppercase bg-black hover:bg-black/90 text-white px-8">
-              {isRTL ? "طلب رابط جديد" : "Request New Link"}
+              {t.auth.sendResetLink}
             </Button>
           </Link>
         </div>
@@ -108,7 +108,7 @@ export default function ResetPassword() {
             <>
               <div className="mb-10">
                 <h2 className="font-heading text-2xl italic mb-2">
-                  {isRTL ? "كلمة مرور جديدة" : "New Password"}
+                  {t.auth.newPassword}
                 </h2>
                 <p className="text-[13px] font-sans text-black/30 leading-relaxed">
                   {isRTL
@@ -121,14 +121,14 @@ export default function ResetPassword() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <Label htmlFor="password" className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-2 block">
-                    {isRTL ? "كلمة المرور الجديدة" : "New Password"}
+                    {t.auth.newPassword}
                   </Label>
                   <div className="relative">
                     <Lock className={`absolute ${isRTL ? "right-3.5" : "left-3.5"} top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-black/15`} strokeWidth={1.5} />
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder={isRTL ? "أدخل كلمة المرور الجديدة" : "Enter new password"}
+                      placeholder={t.auth.passwordPlaceholder}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className={`${isRTL ? "pr-10 pl-10" : "pl-10 pr-10"} h-11 rounded-none border-black/[0.08] text-[13px] font-sans focus:border-black/20 transition-all placeholder:text-black/15`}
@@ -161,14 +161,14 @@ export default function ResetPassword() {
 
                 <div>
                   <Label htmlFor="confirmPassword" className="text-[9px] font-sans tracking-luxury uppercase text-black/30 mb-2 block">
-                    {isRTL ? "تأكيد كلمة المرور" : "Confirm Password"}
+                    {t.auth.confirmPassword}
                   </Label>
                   <div className="relative">
                     <Lock className={`absolute ${isRTL ? "right-3.5" : "left-3.5"} top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-black/15`} strokeWidth={1.5} />
                     <Input
                       id="confirmPassword"
                       type={showConfirm ? "text" : "password"}
-                      placeholder={isRTL ? "أعد إدخال كلمة المرور" : "Re-enter password"}
+                      placeholder={t.auth.passwordPlaceholder}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       className={`${isRTL ? "pr-10 pl-10" : "pl-10 pr-10"} h-11 rounded-none border-black/[0.08] text-[13px] font-sans focus:border-black/20 transition-all placeholder:text-black/15`}
@@ -185,7 +185,7 @@ export default function ResetPassword() {
                   </div>
                   {confirmPassword && password !== confirmPassword && (
                     <p className="text-[11px] text-red-500/70 mt-1.5 font-sans">
-                      {isRTL ? "كلمتا المرور غير متطابقتين" : "Passwords do not match"}
+                      {t.account.passwordsDoNotMatch}
                     </p>
                   )}
                 </div>
@@ -198,10 +198,10 @@ export default function ResetPassword() {
                   {resetMutation.isPending ? (
                     <span className="flex items-center gap-2">
                       <span className="w-3 h-3 border border-white/30 border-t-white animate-spin" />
-                      {isRTL ? "جاري التغيير..." : "Resetting..."}
+                      {t.auth.resetting}
                     </span>
                   ) : (
-                    isRTL ? "تغيير كلمة المرور" : "Reset Password"
+                    t.auth.resetPasswordBtn
                   )}
                 </Button>
               </form>
@@ -212,7 +212,7 @@ export default function ResetPassword() {
                 <CheckCircle className="w-6 h-6 text-black/60" strokeWidth={1.5} />
               </div>
               <h2 className="font-heading text-2xl italic mb-3">
-                {isRTL ? "تم بنجاح" : "Password Changed"}
+                {t.auth.passwordResetSuccess}
               </h2>
               <p className="text-[13px] font-sans text-black/30 leading-relaxed mb-8 max-w-xs mx-auto">
                 {isRTL
@@ -222,7 +222,7 @@ export default function ResetPassword() {
               </p>
               <Link href="/login">
                 <Button className="h-12 rounded-none font-sans text-[10px] tracking-luxury uppercase bg-black hover:bg-black/90 text-white px-12">
-                  {isRTL ? "تسجيل الدخول" : "Sign In"}
+                  {t.auth.signIn}
                 </Button>
               </Link>
             </div>

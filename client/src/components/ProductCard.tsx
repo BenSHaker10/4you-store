@@ -70,7 +70,7 @@ export default function ProductCard({ product, compact }: ProductCardProps) {
       await addToCart(product.id);
       toast.success(t.product.addedToCart, { description: product.name, duration: 2000 });
     } catch {
-      toast.error(isRTL ? "فشل في الإضافة" : "Failed to add");
+      toast.error(t.common.failed);
     } finally {
       setIsAdding(false);
     }
@@ -82,8 +82,8 @@ export default function ProductCard({ product, compact }: ProductCardProps) {
     setLiked(!liked);
     toast.success(
       liked
-        ? (isRTL ? "تمت الإزالة من المفضلة" : "Removed from wishlist")
-        : (isRTL ? "تمت الإضافة للمفضلة" : "Saved to wishlist"),
+        ? (t.productDetail.removedFromWishlist)
+        : (t.productDetail.addedToWishlist),
       { duration: 1500 }
     );
   };
@@ -131,7 +131,7 @@ export default function ProductCard({ product, compact }: ProductCardProps) {
               className="w-full py-3 bg-black text-white text-[10px] font-sans tracking-luxury uppercase hover:bg-black/90 transition-colors flex items-center justify-center gap-2"
             >
               <ShoppingBag className={`w-3 h-3 ${isAdding ? "animate-pulse" : ""}`} strokeWidth={1.5} />
-              {isAdding ? (isRTL ? "جاري الإضافة..." : "Adding...") : t.product.addToCart}
+              {isAdding ? (t.common.loading) : t.product.addToCart}
             </button>
           </div>
         </div>

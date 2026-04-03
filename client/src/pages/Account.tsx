@@ -46,21 +46,21 @@ export default function Account() {
 
   const updateProfile = trpc.auth.updateProfile.useMutation({
     onSuccess: () => {
-      toast.success(isRTL ? "تم تحديث الملف الشخصي" : "Profile updated");
+      toast.success(t.account.profileUpdated);
       utils.auth.me.invalidate();
     },
     onError: () => {
-      toast.error(isRTL ? "فشل في تحديث الملف الشخصي" : "Failed to update profile");
+      toast.error(t.common.failed);
     },
   });
 
   const changePassword = trpc.auth.changePassword.useMutation({
     onSuccess: () => {
-      toast.success(isRTL ? "تم تغيير كلمة المرور" : "Password changed");
+      toast.success(t.account.passwordChanged);
       setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     },
     onError: (err) => {
-      toast.error(err.message || (isRTL ? "فشل في تغيير كلمة المرور" : "Failed to change password"));
+      toast.error(err.message || (t.account.passwordChangeFailed));
     },
   });
 
@@ -72,11 +72,11 @@ export default function Account() {
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      toast.error(isRTL ? "كلمات المرور غير متطابقة" : "Passwords do not match");
+      toast.error(t.account.passwordsDoNotMatch);
       return;
     }
     if (passwordForm.newPassword.length < 8) {
-      toast.error(isRTL ? "كلمة المرور يجب أن تكون 8 أحرف على الأقل" : "Password must be at least 8 characters");
+      toast.error(t.account.passwordTooShort);
       return;
     }
     changePassword.mutate({
@@ -92,9 +92,9 @@ export default function Account() {
   const ChevronIcon = isRTL ? ChevronLeft : ChevronRight;
 
   const menuItems = [
-    { icon: Package, label: isRTL ? "طلباتي" : "My Orders", href: "/orders" },
-    { icon: Heart, label: isRTL ? "المفضلة" : "Wishlist", href: "/products", badge: isRTL ? "قريباً" : "Soon" },
-    { icon: Settings, label: isRTL ? "الإعدادات" : "Settings", href: "/account", active: true },
+    { icon: Package, label: t.account.myOrders, href: "/orders" },
+    { icon: Heart, label: t.nav.wishlist, href: "/products", badge: t.common.comingSoon },
+    { icon: Settings, label: t.account.settings, href: "/account", active: true },
   ];
 
   return (
@@ -206,7 +206,7 @@ export default function Account() {
                       disabled={updateProfile.isPending}
                     >
                       <Save className="w-3 h-3" strokeWidth={1.5} />
-                      {updateProfile.isPending ? (isRTL ? "جاري الحفظ..." : "Saving...") : t.account.saveChanges}
+                      {updateProfile.isPending ? (t.account.saving) : t.account.saveChanges}
                     </Button>
                   </div>
                 </form>
@@ -218,7 +218,7 @@ export default function Account() {
               <div className="px-6 py-5 border-b border-black/[0.04]">
                 <h2 className="text-[10px] font-sans tracking-luxury uppercase text-black/40 flex items-center gap-2">
                   <Lock className="w-3 h-3" strokeWidth={1.5} />
-                  {isRTL ? "تغيير كلمة المرور" : "Change Password"}
+                  {t.account.changePassword}
                 </h2>
               </div>
               <div className="p-6">
@@ -278,7 +278,7 @@ export default function Account() {
                       disabled={changePassword.isPending}
                     >
                       <Lock className="w-3 h-3" strokeWidth={1.5} />
-                      {changePassword.isPending ? (isRTL ? "جاري التغيير..." : "Changing...") : (isRTL ? "تغيير كلمة المرور" : "Change Password")}
+                      {changePassword.isPending ? (t.account.changing) : (t.account.changePassword)}
                     </Button>
                   </div>
                 </form>
