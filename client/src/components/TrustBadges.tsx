@@ -7,7 +7,7 @@ interface TrustBadgesProps {
 }
 
 export default function TrustBadges({ variant = "horizontal", className = "" }: TrustBadgesProps) {
-  const { isRTL } = useLanguage();
+  const { t, isRTL } = useLanguage();
 
   const badges = [
     {

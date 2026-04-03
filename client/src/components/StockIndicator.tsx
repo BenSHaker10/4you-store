@@ -7,7 +7,7 @@ interface StockIndicatorProps {
 }
 
 export default function StockIndicator({ stock, className = "" }: StockIndicatorProps) {
-  const { isRTL } = useLanguage();
+  const { t, isRTL } = useLanguage();
 
   if (stock <= 0) {
     return (
