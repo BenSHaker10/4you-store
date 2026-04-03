@@ -45,11 +45,11 @@
   --color-gold: var(--gold);
   --color-gold-foreground: var(--gold-foreground);
   --font-sans: "Inter", "Tajawal", system-ui, sans-serif;
-  --font-heading: "Playfair Display", "Tajawal", serif;
-  --font-display: "Playfair Display", serif;
+  --font-heading: "Inter", "Tajawal", system-ui, sans-serif;
+  --font-display: "Inter", "Tajawal", system-ui, sans-serif;
 }
 
-/* ═══ CHANEL-INSPIRED LIGHT THEME ═══ */
+/* ═══ PRADA-INSPIRED MINIMAL THEME ═══ */
 :root {
   --radius: 0.25rem;
   /* Pure black & white with gold accents */
@@ -72,9 +72,9 @@
   --border: oklch(0.92 0.002 0);
   --input: oklch(0.92 0.002 0);
   --ring: oklch(0.15 0.005 0);
-  /* Gold accents */
-  --gold: oklch(0.72 0.12 80);
-  --gold-foreground: oklch(0.15 0.005 0);
+  /* Minimal accents - no gold */
+  --gold: oklch(0.15 0.005 0);
+  --gold-foreground: oklch(1 0 0);
   --sale: oklch(0.55 0.22 18);
   --sale-foreground: oklch(1 0 0);
   /* Charts */
@@ -272,7 +272,7 @@
 
   /* Subtle shimmer */
   .shimmer {
-    background: linear-gradient(110deg, transparent 33%, oklch(0.72 0.12 80 / 0.04) 50%, transparent 67%);
+    background: linear-gradient(110deg, transparent 33%, oklch(0.15 0.005 0 / 0.02) 50%, transparent 67%);
     background-size: 300% 100%;
     animation: shimmer 5s ease-in-out infinite;
   }
@@ -328,7 +328,7 @@
 
   /* Gold gradient text */
   .text-gold-gradient {
-    background: linear-gradient(135deg, oklch(0.65 0.14 70), oklch(0.80 0.10 85), oklch(0.72 0.12 80));
+    background: linear-gradient(135deg, oklch(0.15 0.005 0), oklch(0.35 0.005 0), oklch(0.15 0.005 0));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -407,14 +407,14 @@
 
   /* Chanel-style thin line */
   .chanel-line {
-    width: 60px;
+    width: 40px;
     height: 1px;
     background: oklch(0.15 0.005 0);
   }
 
-  /* Elegant letter spacing */
+  /* Prada-style wide letter spacing */
   .tracking-luxury {
-    letter-spacing: 0.2em;
+    letter-spacing: 0.25em;
   }
 
   /* Gradient border - subtle */

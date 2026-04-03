@@ -107,14 +107,14 @@ export default function Home() {
           <p className="text-white/60 text-[10px] tracking-luxury uppercase font-sans mb-6">
             {t.home.curatedCollection}
           </p>
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6 italic">
+          <h1 className="font-sans text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6 font-bold uppercase tracking-tight">
             <>{t.home.heroTitle1}<span className="block mt-2">{t.home.heroTitle2}</span></>
           </h1>
           <p className="text-white/60 text-sm md:text-base font-sans font-light max-w-xl mx-auto mb-10 leading-relaxed">
             {t.home.heroDesc}
           </p>
           <Link href="/products">
-            <button className="group bg-white text-black px-10 py-4 text-[11px] tracking-luxury uppercase font-sans hover:bg-black hover:text-white transition-all duration-500 border border-white">
+            <button className="group bg-transparent text-white px-10 py-4 text-[11px] tracking-widest uppercase font-sans hover:bg-white hover:text-black transition-all duration-500 border border-white">
               {t.home.discoverCollection}
               <ArrowIcon className="inline-block ml-3 w-3.5 h-3.5 transition-transform duration-500 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
             </button>
@@ -160,10 +160,10 @@ export default function Home() {
               <p className="text-[10px] tracking-luxury uppercase text-muted-foreground mb-4">
                 {t.home.ourCollections}
               </p>
-              <h2 className="font-heading text-3xl md:text-4xl text-foreground italic">
+              <h2 className="font-sans text-3xl md:text-4xl text-foreground font-bold uppercase tracking-tight">
                 {t.home.exploreByCategory}
               </h2>
-              <div className="chanel-line mx-auto mt-6" />
+              <div className="w-16 h-px bg-black mx-auto mt-6" />
             </div>
           </Section>
 
@@ -181,7 +181,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-all duration-500" />
                     <div className="absolute inset-0 flex flex-col items-center justify-end pb-8">
                       <p className="text-white/70 text-[10px] tracking-luxury uppercase font-sans mb-2">{cat.nameAr}</p>
-                      <h3 className="font-heading text-xl md:text-2xl text-white italic">{cat.name}</h3>
+                      <h3 className="font-sans text-xl md:text-2xl text-white font-bold uppercase tracking-wide">{cat.name}</h3>
                       <div className="w-8 h-px bg-white/50 mt-3 group-hover:w-16 transition-all duration-500" />
                     </div>
                   </div>
@@ -200,10 +200,10 @@ export default function Home() {
               <p className="text-[10px] tracking-luxury uppercase text-muted-foreground mb-4">
                 {t.home.handpickedForYou}
               </p>
-              <h2 className="font-heading text-3xl md:text-4xl text-foreground italic">
+              <h2 className="font-sans text-3xl md:text-4xl text-foreground font-bold uppercase tracking-tight">
                 {t.home.featuredProducts}
               </h2>
-              <div className="chanel-line mx-auto mt-6" />
+              <div className="w-16 h-px bg-black mx-auto mt-6" />
             </div>
           </Section>
 
@@ -236,7 +236,7 @@ export default function Home() {
           <Section>
             <div className="text-center mt-14">
               <Link href="/products">
-                <button className="group border border-foreground text-foreground px-10 py-3.5 text-[11px] tracking-luxury uppercase font-sans hover:bg-foreground hover:text-background transition-all duration-500">
+                <button className="group border border-black text-black px-10 py-3.5 text-[11px] tracking-widest uppercase font-sans hover:bg-black hover:text-white transition-all duration-500">
                   {t.home.viewAllProducts}
                   <ArrowIcon className="inline-block ml-3 w-3.5 h-3.5 transition-transform duration-500 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
                 </button>
@@ -247,22 +247,22 @@ export default function Home() {
       </section>
 
       {/* ═══ LUXURY OFFER ═══ */}
-      <section className="py-24 md:py-32 bg-black text-white">
+      <section className="py-24 md:py-32 bg-white text-black border-y border-black/10">
         <div className="container">
           <Section>
             <div className="max-w-2xl mx-auto text-center">
-              <p className="text-[10px] tracking-luxury uppercase text-white/40 mb-6">
+              <p className="text-[10px] tracking-luxury uppercase text-black/40 mb-6">
                 {t.home.limitedEdition}
               </p>
-              <h2 className="font-heading text-3xl md:text-5xl italic leading-tight mb-6">
+              <h2 className="font-sans text-3xl md:text-5xl font-bold uppercase tracking-tight leading-tight mb-6">
                 <>{t.home.limitedTitle1}<span className="block">{t.home.limitedTitle2}</span></>
               </h2>
-              <div className="w-12 h-px bg-white/20 mx-auto mb-6" />
-              <p className="text-white/50 font-sans font-light text-sm md:text-base leading-relaxed mb-10 max-w-lg mx-auto">
+              <div className="w-16 h-px bg-black mx-auto mb-6" />
+              <p className="text-black/50 font-sans font-light text-sm md:text-base leading-relaxed mb-10 max-w-lg mx-auto">
                 {t.home.limitedDesc}
               </p>
               <Link href="/products">
-                <button className="group bg-white text-black px-10 py-4 text-[11px] tracking-luxury uppercase font-sans hover:bg-white/90 transition-all duration-500">
+                <button className="group border border-black text-black px-10 py-4 text-[11px] tracking-widest uppercase font-sans hover:bg-black hover:text-white transition-all duration-500">
                   {t.home.shopNow}
                   <ArrowIcon className="inline-block ml-3 w-3.5 h-3.5 transition-transform duration-500 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
                 </button>
@@ -280,10 +280,10 @@ export default function Home() {
               <p className="text-[10px] tracking-luxury uppercase text-muted-foreground mb-4">
                 {t.home.whatTheySay}
               </p>
-              <h2 className="font-heading text-3xl md:text-4xl text-foreground italic">
+              <h2 className="font-sans text-3xl md:text-4xl text-foreground font-bold uppercase tracking-tight">
                 {t.home.clientTestimonials}
               </h2>
-              <div className="chanel-line mx-auto mt-6" />
+              <div className="w-16 h-px bg-black mx-auto mt-6" />
             </div>
           </Section>
 
@@ -331,19 +331,19 @@ export default function Home() {
       </Section>
 
       {/* ═══ NEWSLETTER ═══ */}
-      <section className="py-24 md:py-32 bg-black text-white">
+      <section className="py-24 md:py-32 bg-white text-black border-t border-black/10">
         <div className="container">
           <Section>
             <div className="max-w-lg mx-auto text-center">
-              <Diamond className="w-4 h-4 text-white/30 mx-auto mb-6" strokeWidth={1.2} />
-              <p className="text-[10px] tracking-luxury uppercase text-white/40 mb-4">
+              <Diamond className="w-4 h-4 text-black/30 mx-auto mb-6" strokeWidth={1.2} />
+              <p className="text-[10px] tracking-widest uppercase text-black/40 mb-4">
                 {t.home.stayConnected}
               </p>
-              <h2 className="font-heading text-2xl md:text-3xl text-white italic mb-4">
+              <h2 className="font-sans text-2xl md:text-3xl text-black font-bold uppercase tracking-tight mb-4">
                 {t.home.joinOurWorld}
               </h2>
-              <div className="w-12 h-px bg-white/15 mx-auto mb-6" />
-              <p className="text-white/40 text-sm font-sans font-light mb-8">
+              <div className="w-16 h-px bg-black mx-auto mb-6" />
+              <p className="text-black/40 text-sm font-sans font-light mb-8">
                 {isRTL
                   ? "كن أول من يكتشف المجموعات الجديدة والعروض الحصرية."
                   : "Be the first to discover new collections, exclusive offers, and the art of refined living."}
@@ -352,13 +352,13 @@ export default function Home() {
                 <input
                   type="email"
                   placeholder={t.home.yourEmail}
-                  className="flex-1 bg-white/5 border border-white/10 px-5 py-3.5 text-sm font-sans text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
+                  className="flex-1 bg-white border border-black/15 px-5 py-3.5 text-sm font-sans text-black placeholder:text-black/25 focus:outline-none focus:border-black transition-colors"
                 />
-                <button className="bg-white text-black px-6 py-3.5 text-[10px] tracking-luxury uppercase font-sans hover:bg-white/90 transition-colors whitespace-nowrap">
+                <button className="bg-black text-white px-6 py-3.5 text-[10px] tracking-widest uppercase font-sans hover:bg-black/80 transition-colors whitespace-nowrap">
                   {t.home.subscribe}
                 </button>
               </div>
-              <p className="text-white/15 text-[9px] mt-5 tracking-wide">
+              <p className="text-black/25 text-[9px] mt-5 tracking-wide">
                 {t.home.subscribeOffer}
               </p>
             </div>

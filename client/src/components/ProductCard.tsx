@@ -128,7 +128,7 @@ export default function ProductCard({ product, compact }: ProductCardProps) {
             <button
               onClick={handleAddToCart}
               disabled={isAdding}
-              className="w-full py-3 bg-black text-white text-[10px] font-sans tracking-luxury uppercase hover:bg-black/90 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 bg-white text-black border-t border-black text-[10px] font-sans tracking-widest uppercase hover:bg-black hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
             >
               <ShoppingBag className={`w-3 h-3 ${isAdding ? "animate-pulse" : ""}`} strokeWidth={1.5} />
               {isAdding ? (t.common.loading) : t.product.addToCart}
@@ -139,7 +139,7 @@ export default function ProductCard({ product, compact }: ProductCardProps) {
         {/* Info */}
         <div className="py-3 px-1 space-y-1">
           {product.brand && (
-            <p className="text-[9px] font-sans tracking-luxury uppercase text-black/30">{product.brand}</p>
+            <p className="text-[9px] font-sans tracking-widest uppercase text-black/30">{product.brand}</p>
           )}
           <h3 className="text-[12px] font-sans leading-snug line-clamp-2 text-black/80 group-hover:text-black transition-colors duration-300">
             {product.name}

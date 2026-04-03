@@ -70,9 +70,9 @@ export default function Navbar() {
     <header ref={navRef} className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? "bg-white/98 backdrop-blur-xl shadow-[0_1px_0_rgba(0,0,0,0.06)]" : "bg-white"}`}>
 
       {/* ─── Top Bar ─── */}
-      <div className="bg-black text-white">
+      <div className="bg-white text-black border-b border-black/10">
         <div className="container">
-          <div className="text-center text-[9px] md:text-[10px] py-2 tracking-luxury uppercase font-sans">
+          <div className="text-center text-[9px] md:text-[10px] py-2 tracking-widest uppercase font-sans text-black/50">
             {t.topBar.freeShipping} &nbsp;&mdash;&nbsp; {t.topBar.newArrivals}
           </div>
         </div>
@@ -93,8 +93,8 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="shrink-0 group">
-              <h1 className="font-heading text-2xl md:text-3xl tracking-tight transition-opacity duration-300 group-hover:opacity-60 italic">
-                <span className="font-light">4</span><span className="font-semibold">You</span>
+              <h1 className="font-sans text-2xl md:text-3xl tracking-tight transition-opacity duration-300 group-hover:opacity-60 font-bold uppercase">
+                4 YOU
               </h1>
             </Link>
 
@@ -103,7 +103,7 @@ export default function Navbar() {
               {DEPARTMENTS.map((dept) => (
                 <button
                   key={dept.value}
-                  className={`px-4 py-2 text-[11px] tracking-luxury uppercase font-sans transition-all duration-300 ${
+                  className={`px-4 py-2 text-[11px] tracking-widest uppercase font-sans transition-all duration-300 ${
                     activeDept === dept.value
                       ? "text-black border-b-2 border-black"
                       : "text-black/40 hover:text-black"
@@ -115,7 +115,7 @@ export default function Navbar() {
               ))}
               <Link
                 href="/products?featured=true"
-                className="px-4 py-2 text-[11px] tracking-luxury uppercase font-sans text-black/40 hover:text-black transition-all duration-300"
+                className="px-4 py-2 text-[11px] tracking-widest uppercase font-sans text-black/40 hover:text-black transition-all duration-300"
               >
                 {t.nav.sale}
               </Link>
