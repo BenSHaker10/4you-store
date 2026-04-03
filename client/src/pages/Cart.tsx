@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { trpc } from "@/lib/trpc";
 import ProductCard from "@/components/ProductCard";
+import SEOHead from "@/components/SEOHead";
 
 export default function Cart() {
   const { items, isLoading, updateQuantity, removeItem, clearCart } = useCart();
@@ -107,6 +108,7 @@ export default function Cart() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead title={isRTL ? "سلة التسوق" : "Shopping Cart"} url="/cart" noindex />
       {/* Breadcrumb */}
       <div className="border-b border-black/[0.04]">
         <div className="container py-4">

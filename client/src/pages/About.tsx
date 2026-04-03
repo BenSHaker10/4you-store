@@ -2,6 +2,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "wouter";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ArrowLeft, Diamond, Award, Heart, Sparkles, Crown, Shield } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
 
 /* ─── CDN Images (reuse existing) ─── */
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310419663030484372/XnovjRfmZXUvsRtsthcxNS/hero-luxury-bw_3ea3dd72.jpg";
@@ -101,6 +102,11 @@ export default function About() {
 
   return (
     <div className="bg-white text-foreground">
+      <SEOHead
+        title={isRTL ? "من نحن" : "About Us"}
+        description={isRTL ? "تعرف على قصة 4 YOU - وجهتك الأولى للعطور الفاخرة والمكياج والعناية بالبشرة" : "Learn about 4 YOU - Your premier destination for luxury perfumes, makeup and skincare"}
+        url="/about"
+      />
 
       {/* ═══ HERO ═══ */}
       <section className="relative h-[70vh] md:h-[80vh] overflow-hidden">

@@ -6,6 +6,7 @@ import { SlidersHorizontal, X, Search, Package, Grid3X3, LayoutGrid } from "luci
 import { useState, useMemo, useEffect } from "react";
 import { useSearch, useLocation } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
+import SEOHead from "@/components/SEOHead";
 
 export default function Products() {
   const { t, isRTL } = useLanguage();
@@ -100,6 +101,11 @@ export default function Products() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead
+        title={isRTL ? "تسوق المنتجات" : "Shop Products"}
+        description={isRTL ? "تصفح مجموعتنا المميزة من العطور والمكياج ومستحضرات العناية بالبشرة" : "Browse our curated collection of perfumes, makeup and skincare products"}
+        url="/products"
+      />
       {/* Page Header */}
       <div className="border-b border-black/[0.04]">
         <div className="container py-12 md:py-16">

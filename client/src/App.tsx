@@ -20,18 +20,34 @@ import Login from "./pages/Login";
 import About from "./pages/About";
 import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminProducts from "./pages/admin/AdminProducts";
-import AdminProductForm from "./pages/admin/AdminProductForm";
-import AdminOrders from "./pages/admin/AdminOrders";
-import AdminCategories from "./pages/admin/AdminCategories";
-import AdminSettings from "./pages/admin/AdminSettings";
-import AdminCoupons from "./pages/admin/AdminCoupons";
+import { lazy, Suspense } from "react";
+
+// Lazy-loaded admin pages for better code splitting
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminProducts = lazy(() => import("./pages/admin/AdminProducts"));
+const AdminProductForm = lazy(() => import("./pages/admin/AdminProductForm"));
+const AdminOrders = lazy(() => import("./pages/admin/AdminOrders"));
+const AdminCategories = lazy(() => import("./pages/admin/AdminCategories"));
+const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
+const AdminCoupons = lazy(() => import("./pages/admin/AdminCoupons"));
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import BrandsBar from "./components/BrandsBar";
+import FloatingWhatsApp from "./components/FloatingWhatsApp";
+import SEOHead from "./components/SEOHead";
+
+function AdminLoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="text-center">
+        <div className="w-8 h-8 border-2 border-black/10 border-t-black animate-spin mx-auto mb-4" />
+        <p className="text-[11px] font-sans text-black/30 tracking-wide uppercase">Loading...</p>
+      </div>
+    </div>
+  );
+}
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -73,15 +89,15 @@ function Router() {
       <Route path="/orders" component={Orders} />
       <Route path="/orders/:id" component={OrderDetail} />
       <Route path="/account" component={Account} />
-      {/* Admin pages */}
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/products" component={AdminProducts} />
-      <Route path="/admin/products/new" component={AdminProductForm} />
-      <Route path="/admin/products/:id" component={AdminProductForm} />
-      <Route path="/admin/orders" component={AdminOrders} />
-      <Route path="/admin/categories" component={AdminCategories} />
-      <Route path="/admin/coupons" component={AdminCoupons} />
-      <Route path="/admin/settings" component={AdminSettings} />
+      {/* Admin pages - lazy loaded */}
+      <Route path="/admin">{() => <Suspense fallback={<AdminLoadingFallback />}><AdminDashboard /></Suspense>}</Route>
+      <Route path="/admin/products">{() => <Suspense fallback={<AdminLoadingFallback />}><AdminProducts /></Suspense>}</Route>
+      <Route path="/admin/products/new">{() => <Suspense fallback={<AdminLoadingFallback />}><AdminProductForm /></Suspense>}</Route>
+      <Route path="/admin/products/:id">{(params) => <Suspense fallback={<AdminLoadingFallback />}><AdminProductForm /></Suspense>}</Route>
+      <Route path="/admin/orders">{() => <Suspense fallback={<AdminLoadingFallback />}><AdminOrders /></Suspense>}</Route>
+      <Route path="/admin/categories">{() => <Suspense fallback={<AdminLoadingFallback />}><AdminCategories /></Suspense>}</Route>
+      <Route path="/admin/coupons">{() => <Suspense fallback={<AdminLoadingFallback />}><AdminCoupons /></Suspense>}</Route>
+      <Route path="/admin/settings">{() => <Suspense fallback={<AdminLoadingFallback />}><AdminSettings /></Suspense>}</Route>
       {/* Fallback */}
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
@@ -98,9 +114,11 @@ function App() {
             <CartProvider>
               <Toaster />
               <AuthGuard>
+                <SEOHead />
                 <AppLayout>
                   <Router />
                 </AppLayout>
+                <FloatingWhatsApp />
                 <PWAInstallPrompt />
               </AuthGuard>
             </CartProvider>

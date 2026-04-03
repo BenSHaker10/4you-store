@@ -4,6 +4,7 @@ import { ArrowRight, ArrowLeft, Sparkles, ChevronRight, ChevronLeft, Truck, Shie
 import { Link } from "wouter";
 import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import SEOHead from "@/components/SEOHead";
 
 /* ─── CDN Images ─── */
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310419663030484372/XnovjRfmZXUvsRtsthcxNS/hero-luxury-bw_3ea3dd72.jpg";
@@ -82,6 +83,11 @@ export default function Home() {
 
   return (
     <div className="bg-white">
+      <SEOHead
+        title={isRTL ? "متجر العطور والمكياج الفاخر" : "Premium Beauty Store"}
+        description={isRTL ? "متجر 4 YOU للعطور الفاخرة والمكياج والعناية بالبشرة من أرقى الماركات العالمية. شحن مجاني للطلبات فوق 250 ريال." : "4 YOU Store for luxury perfumes, makeup and skincare from the world's finest brands. Free shipping on orders over 250 SAR."}
+        url="/"
+      />
 
       {/* ═══ HERO SECTION ═══ */}
       <section className="relative h-[100vh] min-h-[600px] flex items-center justify-center overflow-hidden">

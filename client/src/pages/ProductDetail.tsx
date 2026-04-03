@@ -11,6 +11,9 @@ import ProductCard from "@/components/ProductCard";
 import ReviewSection from "@/components/ReviewSection";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
 import { useLanguage } from "@/contexts/LanguageContext";
+import SEOHead, { ProductJsonLd } from "@/components/SEOHead";
+import StockIndicator from "@/components/StockIndicator";
+import TrustBadges from "@/components/TrustBadges";
 
 function ProductRatingDisplay({ productId }: { productId: number }) {
   const { t } = useLanguage();
@@ -140,16 +143,53 @@ export default function ProductDetail() {
   const prevImage = () => setSelectedImage(i => (i - 1 + images.length) % images.length);
 
   const handleShare = async () => {
+    const shareData = {
+      title: product?.name || "4 YOU",
+      text: product?.description || (isRTL ? "شاهد هذا المنتج من 4 YOU" : "Check out this product from 4 YOU"),
+      url: window.location.href,
+    };
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast.success(isRTL ? "تم نسخ الرابط" : "Link copied");
-    } catch {
-      toast.error(isRTL ? "فشل في النسخ" : "Failed to copy");
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success(isRTL ? "تم نسخ الرابط" : "Link copied");
+      }
+    } catch (err: any) {
+      if (err?.name !== "AbortError") {
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          toast.success(isRTL ? "تم نسخ الرابط" : "Link copied");
+        } catch {
+          toast.error(isRTL ? "فشل في النسخ" : "Failed to copy");
+        }
+      }
     }
   };
 
   return (
     <div className="min-h-screen bg-white">
+      {/* SEO Head */}
+      <SEOHead
+        title={product.name}
+        description={product.description || `${product.name} - ${product.brand || '4 YOU'}`}
+        image={images[0]?.url}
+        url={`/product/${product.slug}`}
+        type="product"
+        price={product.price}
+        availability={product.stock > 0 ? "in stock" : "out of stock"}
+        brand={product.brand || undefined}
+      />
+      <ProductJsonLd
+        name={product.name}
+        description={product.description || undefined}
+        image={images[0]?.url}
+        price={product.price}
+        availability={product.stock > 0 ? "InStock" : "OutOfStock"}
+        brand={product.brand || undefined}
+        sku={product.sku || undefined}
+        url={`/product/${product.slug}`}
+      />
       {/* Breadcrumb */}
       <div className="border-b border-black/[0.04]">
         <div className="container py-4">
@@ -294,20 +334,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Stock */}
-            <div className="flex items-center gap-2 mb-6">
-              {product.stock > 0 ? (
-                <div className="flex items-center gap-2 text-[11px] font-sans">
-                  <span className="w-1.5 h-1.5 bg-black rounded-full" />
-                  <span className="text-black/60">{t.productDetail.inStock}</span>
-                  <span className="text-black/25">({product.stock} {isRTL ? "متوفر" : "available"})</span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 text-[11px] font-sans">
-                  <span className="w-1.5 h-1.5 bg-black/30 rounded-full" />
-                  <span className="text-black/40">{t.productDetail.outOfStock}</span>
-                </div>
-              )}
-            </div>
+            <StockIndicator stock={product.stock} className="mb-6" />
 
             {/* Description */}
             {product.description && (
@@ -374,21 +401,9 @@ export default function ProductDetail() {
               </button>
             </div>
 
-            {/* Shipping Info */}
-            <div className="border-t border-black/[0.06] pt-6 space-y-4">
-              {[
-                { icon: Truck, title: t.productDetail.freeShipping, desc: t.productDetail.freeShippingDesc },
-                { icon: RotateCcw, title: t.productDetail.easyReturns, desc: t.productDetail.easyReturnsDesc },
-                { icon: Shield, title: t.productDetail.authentic, desc: t.productDetail.authenticDesc },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-4">
-                  <item.icon className="w-4 h-4 text-black/20 shrink-0" strokeWidth={1.5} />
-                  <div>
-                    <p className="text-[11px] font-sans text-black/60">{item.title}</p>
-                    <p className="text-[10px] font-sans text-black/25 mt-0.5">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
+            {/* Trust Badges */}
+            <div className="border-t border-black/[0.06] pt-6">
+              <TrustBadges variant="vertical" />
             </div>
 
             {/* Tags */}

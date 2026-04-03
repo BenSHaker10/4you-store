@@ -9,6 +9,8 @@ import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import SEOHead from "@/components/SEOHead";
+import TrustBadges from "@/components/TrustBadges";
 
 export default function Checkout() {
   const { items, refetch } = useCart();
@@ -146,6 +148,7 @@ export default function Checkout() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead title={isRTL ? "إتمام الطلب" : "Checkout"} url="/checkout" noindex />
       {/* Breadcrumb */}
       <div className="border-b border-black/[0.04]">
         <div className="container py-4">
@@ -538,6 +541,9 @@ export default function Checkout() {
           </div>
         </form>
       </div>
+
+      {/* Trust Badges */}
+      <TrustBadges variant="compact" className="border-t border-black/[0.04] mt-8" />
     </div>
   );
 }
